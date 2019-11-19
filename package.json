@@ -1,0 +1,8 @@
+{
+  "name": "pnc-js-libs",
+  "version": "0.1.0-ER.1",
+  "description": "Parent package for a collection of PNC JavaScript libraries ",
+  "author": "Alex Creasy <acreasy@redhat.com>",
+  "license": "Apache-2.0",
+  "private": true
+}
