@@ -1,8 +1,13 @@
 {
-  "name": "pnc-js-libs",
+  "name": "@project-ncl/pnc-js-libs",
   "version": "0.1.0-ER.1",
   "description": "Parent package for a collection of PNC JavaScript libraries ",
   "author": "Alex Creasy <acreasy@redhat.com>",
   "license": "Apache-2.0",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "lerna": "^3.18.4",
+    "ts-lint": "^4.5.1",
+    "typescript": "^3.7.2"
+  }
 }
