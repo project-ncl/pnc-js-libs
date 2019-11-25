@@ -1,7 +1,5 @@
 dist
-tmp
-.rts2_cache*
-
+.tmp
 ### Bower ###
 bower_components
 .bower-cache

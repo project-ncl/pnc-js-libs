@@ -1,0 +1,31 @@
+{
+  "name": "@project-ncl/pnc-dto-types",
+  "version": "0.1.0-ER.1",
+  "description": "TypeScript definitions of PNC DTOs used by its REST API.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/project-ncl/pnc-js-libs.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "PNC"
+  ],
+  "author": "Alex Creasy <acreasy@redhat.com>",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "dtsgenerator": "^2.3.2"
+  },
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "clean": "rm -rf .tmp dist",
+    "nuke": "npm run clean && rm -rf node_modules",
+    "generate:openapi": "./generate-openapi-spec.sh",
+    "generate:dts": "dtsgen -n \"\" -o ./dist/index.d.ts ./.tmp/pnc-openapi.json",
+    "build": "npm run clean && npm run generate:openapi && npm run generate:dts"
+  },
+  "dependencies": {
+    "npx": "^10.2.0"
+  }
+}
