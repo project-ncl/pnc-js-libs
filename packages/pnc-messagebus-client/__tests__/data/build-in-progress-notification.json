@@ -1,0 +1,53 @@
+{
+  "oldStatus": "NEW",
+  "build": {
+    "id": "396",
+    "submitTime": 1575038025.134,
+    "status": "BUILDING",
+    "buildContentId": "build-396",
+    "temporaryBuild": false,
+    "project": {
+      "id": "103",
+      "name": "Test Project",
+      "description": "Description of test project",
+      "projectUrl": "https://github.com/project/repo-name.git"
+    },
+    "scmRepository": {
+      "id": "103",
+      "internalUrl": "git+ssh://internal.repo.com/project/repo-name.git",
+      "preBuildSyncEnabled": true
+    },
+    "environment": {
+      "id": "20",
+      "name": "OpenJDK 1.8.0; Mvn 3.6.0",
+      "description": "OpenJDK 1.8.0; Mvn 3.6.0",
+      "systemImageRepositoryUrl": "system.image.repository.com",
+      "systemImageId": "org/imagex.x.x.x:latest",
+      "attributes": {
+        "JDK": "1.8.0",
+        "MAVEN": "3.6.0",
+        "OS": "Linux"
+      },
+      "systemImageType": "DOCKER_IMAGE",
+      "deprecated": false
+    },
+    "user": {
+      "id": "104",
+      "username": "user"
+    },
+    "buildConfigRevision": {
+      "id": "161",
+      "rev": 152,
+      "name": "20191129143323_test-master",
+      "description": "Description of test config",
+      "buildScript": "mvn deploy -DskipTests",
+      "scmRevision": "master",
+      "creationTime": 1575038003.372,
+      "modificationTime": 1575038003.373,
+      "buildType": "MVN"
+    }
+  },
+  "job": "BUILD",
+  "notificationType": "BUILD_STATUS_CHANGED",
+  "progress": "IN_PROGRESS"
+}
