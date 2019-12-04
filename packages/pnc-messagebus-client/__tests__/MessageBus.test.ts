@@ -1,4 +1,6 @@
 import { WS } from "jest-websocket-mock";
+import BuildChangedNotification from "../src/dto/BuildChangedNotification";
+import GroupBuildStatusChangedNotification from "../src/dto/GroupBuildStatusChangedNotification";
 import MessageBus from "../src/MessageBus";
 
 
@@ -8,13 +10,21 @@ describe("MessageBus", () => {
     let messageBus: MessageBus;
     let clientSocket: WebSocket;
 
-    let mockBuildInProgressNotification: any;
+    let mockBuildInProgressNotification: BuildChangedNotification;
+
+    let mockGroupBuildInProgressNotification: GroupBuildStatusChangedNotification;
 
     let mockListener: any;
 
-    beforeEach(async () => {
-        mockBuildInProgressNotification = await import("./data/build-in-progress-notification.json");
+    async function loadMocks() {
+        mockBuildInProgressNotification = await import("./data/build-in-progress-notification.json") as BuildChangedNotification;
+        mockGroupBuildInProgressNotification = await import("./data/group-build-in-progress-notification.json") as GroupBuildStatusChangedNotification;
+
         mockListener = jest.fn();
+    }
+
+    beforeEach(async () => {
+        await loadMocks();
 
         server = new WS(WS_URL, { jsonProtocol: true });
 
@@ -94,4 +104,43 @@ describe("MessageBus", () => {
 
         expect(mockListener.mock.calls.length).toEqual(0);
     });
+
+
+    it("should notify onGroupBuildProgressChange listeners when it receives a GROUP_BUILD job notification", async () => {
+        messageBus.onGroupBuildProgressChange(mockListener);
+
+        server.send(mockGroupBuildInProgressNotification);
+
+        expect(mockListener.mock.calls.length).toEqual(1);
+        expect(mockListener.mock.calls[0][0]).toEqual(mockGroupBuildInProgressNotification.groupBuild);
+        expect(mockListener.mock.calls[0][1]).toEqual(mockGroupBuildInProgressNotification);
+    });
+
+    it("should notify onGroupBuildStatusChange listeners when it receives a GROUP_BUILD_STATUS_CHANGED notification", async () => {
+        messageBus.onGroupBuildStatusChange(mockListener);
+
+        server.send(mockGroupBuildInProgressNotification);
+
+        expect(mockListener.mock.calls.length).toEqual(1);
+        expect(mockListener.mock.calls[0][0]).toEqual(mockGroupBuildInProgressNotification.groupBuild);
+        expect(mockListener.mock.calls[0][1]).toEqual(mockGroupBuildInProgressNotification);
+    });
+
+    it("should notify onGroupBuildStatus listeners when it receives a notification with a matching status", async () => {
+        messageBus.onGroupBuildStatus("BUILDING", mockListener);
+
+        server.send(mockGroupBuildInProgressNotification);
+
+        expect(mockListener.mock.calls[0][0]).toEqual(mockGroupBuildInProgressNotification.groupBuild);
+        expect(mockListener.mock.calls[0][1]).toEqual(mockGroupBuildInProgressNotification);
+    });
+
+    it("should NOT notify onGroupBuildStatus listeners when it receives a notification with a non-matching status", async () => {
+        messageBus.onGroupBuildStatus("FAILED", mockListener);
+
+        server.send(mockGroupBuildInProgressNotification);
+
+        expect(mockListener.mock.calls.length).toEqual(0);
+    });
+
 });
