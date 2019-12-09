@@ -30,6 +30,7 @@ export interface Build {
     submitTime?: number; // int64
     startTime?: number; // int64
     endTime?: number; // int64
+    progress?: "PENDING" | "IN_PROGRESS" | "FINISHED";
     status?: "SUCCESS" | "FAILED" | "NO_REBUILD_REQUIRED" | "WAITING_FOR_DEPENDENCIES" | "BUILDING" | "REJECTED" | "REJECTED_FAILED_DEPENDENCIES" | "CANCELLED" | "SYSTEM_ERROR" | "NEW";
     buildContentId?: string;
     temporaryBuild?: boolean;

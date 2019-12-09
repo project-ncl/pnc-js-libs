@@ -1,0 +1,26 @@
+{
+  "name": "pnc-js-libs",
+  "description": "JavaScript Libraries for PNC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/project-ncl/pnc-js-libs.git"
+  },
+  "main": "packages/umd-bundle/dist/pnc-js-libs.js",
+  "moduleType": [
+    "globals",
+    "amd",
+    "es6",
+    "node"
+  ],
+  "authors": [
+    "Alex Creasy <acreasy@redhat.com>"
+  ],
+  "license": "Apache-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

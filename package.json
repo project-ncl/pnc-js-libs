@@ -9,5 +9,8 @@
     "lerna": "^3.18.4",
     "ts-lint": "^4.5.1",
     "typescript": "^3.7.2"
+  },
+  "scripts": {
+    "build": "lerna run build"
   }
 }
