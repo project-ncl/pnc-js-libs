@@ -9,9 +9,19 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "src/index.ts",
+  "source": "src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "jest"
+    "clean": "rm -rf dist/",
+    "nuke": "npm run clean && rm -rf node_modules",
+    "lint": "tslint -c ../../tslint.json 'src/**/*.ts'",
+    "lint:fix": "tslint -c ../../tslint.json 'src/**/*.ts' --fix",
+    "test": "jest",
+    "pretest": "npm run lint",
+    "compile": "tsc",
+    "prebuild": "npm run clean && npm run test",
+    "build": "npm run compile"
   },
   "keywords": [
     "PNC",

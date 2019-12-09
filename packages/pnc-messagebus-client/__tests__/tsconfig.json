@@ -5,6 +5,7 @@
       "resolveJsonModule": true
     },
     "include": [
-      "../**/*.ts"
+      "../**/*.ts",
+      "../__tests__/**/*.json"
     ]
   }

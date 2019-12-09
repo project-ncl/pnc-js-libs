@@ -1,0 +1,19 @@
+{
+  "groupBuild": {
+    "id": "143",
+    "startTime": 1575474048.354,
+    "status": "BUILDING",
+    "temporaryBuild": false,
+    "groupConfig": {
+      "id": "122",
+      "name": "Group 2"
+    },
+    "user": {
+      "id": "104",
+      "username": "LittleBobbyTables"
+    }
+  },
+  "job": "GROUP_BUILD",
+  "notificationType": "GROUP_BUILD_STATUS_CHANGED",
+  "progress": "IN_PROGRESS"
+}

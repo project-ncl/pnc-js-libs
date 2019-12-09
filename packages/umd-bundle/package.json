@@ -1,0 +1,21 @@
+{
+  "name": "@project-ncl/pnc-js-libs-bundle",
+  "version": "0.1.0-ER.1",
+  "description": "UMD bundle of pnc js libs",
+  "author": "Alex Creasy <acreasy@redhat.com>",
+  "license": "Apache-2.0",
+  "private": true,
+  "devDependencies": {
+    "bower": "^1.8.8",
+    "rollup": "^1.27.9",
+    "rollup-plugin-node-resolve": "^5.2.0"
+  },
+  "scripts": {
+    "clean": "rm -rf dist && rm -rf bower_components",
+    "nuke": "npm run clean && rm -rf node_modules && rm -rf bower_components",
+    "build": "rollup -c"
+  },
+  "dependencies": {
+    "@project-ncl/pnc-messagebus-client": "0.1.0-ER.1"
+  }
+}
