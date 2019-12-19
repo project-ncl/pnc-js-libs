@@ -9,5 +9,7 @@ export default interface Notification {
 
     readonly progress: JobNotificationProgress;
 
+    readonly oldProgress: JobNotificationProgress;
+
     readonly message?: string | null;
 }

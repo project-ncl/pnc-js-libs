@@ -1,4 +1,5 @@
 import { BuildStatus } from "./dto/BuildStatus";
+import { JobNotificationProgress } from "./dto/JobNotificationProgress";
 import Notification from "./dto/Notification";
 import { isBuildChangedNotification, isGroupBuildStatusChangedNotification } from "./dto/TypeGuards";
 import { ListenerUnsubscriber } from "./GenericTypes";
@@ -37,12 +38,20 @@ export default class MessageBus {
     public onBuildProgressChange(listener: BuildListener): ListenerUnsubscriber {
 
         const dispatcher: Dispatcher = notification => {
-            if (isBuildChangedNotification(notification)) {
+            if (isBuildChangedNotification(notification) && notification.progress !== notification.oldProgress) {
                 listener(notification.build, notification);
             }
         };
 
         return this.addDispatcher(dispatcher);
+    }
+
+    public onBuildProgress(progress: JobNotificationProgress, listener: BuildListener): ListenerUnsubscriber {
+        return this.addDispatcher(notification => {
+            if (isBuildChangedNotification(notification) && notification.progress === progress) {
+                listener(notification.build, notification);
+            }
+        });
     }
 
     public onBuildStatusChange(listener: BuildListener): ListenerUnsubscriber {
@@ -63,7 +72,15 @@ export default class MessageBus {
 
     public onGroupBuildProgressChange(listener: GroupBuildListener): ListenerUnsubscriber {
         return this.addDispatcher(notification => {
-            if (isGroupBuildStatusChangedNotification(notification)) {
+            if (isGroupBuildStatusChangedNotification(notification) && notification.progress !== notification.oldProgress) {
+                listener(notification.groupBuild, notification);
+            }
+        });
+    }
+
+    public onGroupBuildProgress(progress: JobNotificationProgress, listener: GroupBuildListener): ListenerUnsubscriber {
+        return this.addDispatcher(notification => {
+            if (isGroupBuildStatusChangedNotification(notification) && notification.progress === progress) {
                 listener(notification.groupBuild, notification);
             }
         });
