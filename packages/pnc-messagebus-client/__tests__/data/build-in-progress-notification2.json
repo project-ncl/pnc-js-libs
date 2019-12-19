@@ -50,5 +50,5 @@
   "job": "BUILD",
   "notificationType": "BUILD_STATUS_CHANGED",
   "progress": "IN_PROGRESS",
-  "oldProgress": "PENDING"
+  "oldProgress": "IN_PROGRESS"
 }
