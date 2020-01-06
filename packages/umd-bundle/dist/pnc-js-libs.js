@@ -35,11 +35,20 @@
         }
         onBuildProgressChange(listener) {
             const dispatcher = notification => {
-                if (isBuildChangedNotification(notification)) {
+                if (isBuildChangedNotification(notification) && notification.progress !== notification.oldProgress) {
                     listener(notification.build, notification);
                 }
             };
             return this.addDispatcher(dispatcher);
+        }
+        onBuildProgress(progress, listener) {
+            return this.addDispatcher(notification => {
+                if (isBuildChangedNotification(notification)
+                    && notification.progress === progress
+                    && notification.progress !== notification.oldProgress) {
+                    listener(notification.build, notification);
+                }
+            });
         }
         onBuildStatusChange(listener) {
             return this.addDispatcher(notification => {
@@ -57,7 +66,16 @@
         }
         onGroupBuildProgressChange(listener) {
             return this.addDispatcher(notification => {
-                if (isGroupBuildStatusChangedNotification(notification)) {
+                if (isGroupBuildStatusChangedNotification(notification) && notification.progress !== notification.oldProgress) {
+                    listener(notification.groupBuild, notification);
+                }
+            });
+        }
+        onGroupBuildProgress(progress, listener) {
+            return this.addDispatcher(notification => {
+                if (isGroupBuildStatusChangedNotification(notification)
+                    && notification.progress === progress
+                    && notification.progress !== notification.oldProgress) {
                     listener(notification.groupBuild, notification);
                 }
             });
