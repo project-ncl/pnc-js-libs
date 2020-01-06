@@ -25,6 +25,9 @@ export interface ArtifactPage {
     totalHits?: number; // int32
     content?: Artifact[];
 }
+export interface Banner {
+    banner?: string;
+}
 export interface Build {
     id: string;
     submitTime?: number; // int64

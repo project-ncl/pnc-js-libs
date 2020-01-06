@@ -48,7 +48,9 @@ export default class MessageBus {
 
     public onBuildProgress(progress: JobNotificationProgress, listener: BuildListener): ListenerUnsubscriber {
         return this.addDispatcher(notification => {
-            if (isBuildChangedNotification(notification) && notification.progress === progress) {
+            if (isBuildChangedNotification(notification)
+                && notification.progress === progress
+                && notification.progress !== notification.oldProgress) {
                 listener(notification.build, notification);
             }
         });
@@ -80,7 +82,9 @@ export default class MessageBus {
 
     public onGroupBuildProgress(progress: JobNotificationProgress, listener: GroupBuildListener): ListenerUnsubscriber {
         return this.addDispatcher(notification => {
-            if (isGroupBuildStatusChangedNotification(notification) && notification.progress === progress) {
+            if (isGroupBuildStatusChangedNotification(notification)
+                && notification.progress === progress
+                && notification.progress !== notification.oldProgress) {
                 listener(notification.groupBuild, notification);
             }
         });
