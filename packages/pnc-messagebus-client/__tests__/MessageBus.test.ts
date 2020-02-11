@@ -63,6 +63,17 @@ describe("MessageBus", () => {
         expect(closeEvent.reason).toEqual("Client session finished");
     });
 
+    it("should notify onMessage listeners of any messages received", async () => {
+        messageBus.onMessage(mockListener);
+
+        server.send(JSON.stringify({ test: "value "}));
+        server.send(mockBuildInProgressNotification);
+        server.send(mockGroupBuildInProgressNotification);
+
+        expect(mockListener.mock.calls.length).toEqual(3);
+        expect(mockListener.mock.calls[0][0]).toBeDefined();
+    });
+
     it("should notify onBuildProgressChange listeners when it receives a BUILD job notification which had different values for progress and oldProgress", async () => {
         messageBus.onBuildProgressChange(mockListener);
 
