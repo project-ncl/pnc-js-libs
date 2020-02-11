@@ -33,6 +33,10 @@
                 this.ws.close(1000, "Client session finished");
             });
         }
+        onMessage(listener) {
+            const dispatcher = message => listener(message);
+            return this.addDispatcher(dispatcher);
+        }
         onBuildProgressChange(listener) {
             const dispatcher = notification => {
                 if (isBuildChangedNotification(notification) && notification.progress !== notification.oldProgress) {

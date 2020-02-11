@@ -2,7 +2,7 @@ import { BuildStatus } from "./dto/BuildStatus";
 import { JobNotificationProgress } from "./dto/JobNotificationProgress";
 import Notification from "./dto/Notification";
 import { isBuildChangedNotification, isGroupBuildStatusChangedNotification } from "./dto/TypeGuards";
-import { ListenerUnsubscriber } from "./GenericTypes";
+import { Consumer, ListenerUnsubscriber } from "./GenericTypes";
 import { BuildListener, GroupBuildListener } from "./Listeners";
 
 type Dispatcher = (notification: Notification) => void;
@@ -33,6 +33,11 @@ export default class MessageBus {
             this.ws.addEventListener("close", event => resolve(event));
             this.ws.close(1000, "Client session finished");
         });
+    }
+
+    public onMessage(listener: Consumer<any>): ListenerUnsubscriber {
+        const dispatcher: Dispatcher = message => listener(message);
+        return this.addDispatcher(dispatcher);
     }
 
     public onBuildProgressChange(listener: BuildListener): ListenerUnsubscriber {
@@ -111,6 +116,7 @@ export default class MessageBus {
         this.dispatchers.push(dispatcher);
         return () => this.removeDispatcher(dispatcher);
     }
+
     private removeDispatcher(dispatcher: Dispatcher): void {
         const index: number = this.dispatchers.indexOf(dispatcher);
         if (index >= 0) {

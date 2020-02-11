@@ -53,7 +53,7 @@ export interface Build {
 }
 export interface BuildConfigCreationResponse {
     taskId?: number; // int32
-    buildConfiguration?: BuildConfiguration;
+    buildConfig?: BuildConfiguration;
 }
 export interface BuildConfigPage {
     pageIndex?: number; // int32
@@ -72,7 +72,7 @@ export interface BuildConfigRevisionPage {
 export interface BuildConfigWithSCMRequest {
     scmUrl: string;
     preBuildSyncEnabled?: boolean;
-    buildConfiguration?: BuildConfiguration;
+    buildConfig?: BuildConfiguration;
 }
 export interface BuildConfiguration {
     id: string;
@@ -265,6 +265,26 @@ export interface GroupConfigurationRef {
     id: string;
     name: string;
 }
+export interface MilestoneInfo {
+    productId?: string;
+    productName?: string;
+    productVersionId?: string;
+    productVersionVersion?: string;
+    milestoneId?: string;
+    milestoneVersion?: string;
+    milestoneEndDate?: number; // int64
+    releaseId?: string;
+    releaseVersion?: string;
+    releaseReleaseDate?: number; // int64
+    built?: boolean;
+}
+export interface MilestoneInfoPage {
+    pageIndex?: number; // int32
+    pageSize?: number; // int32
+    totalPages?: number; // int32
+    totalHits?: number; // int32
+    content?: MilestoneInfo[];
+}
 export interface PageArtifact {
     pageIndex?: number; // int32
     pageSize?: number; // int32
@@ -314,6 +334,13 @@ export interface PageGroupConfiguration {
     totalHits?: number; // int32
     content?: GroupConfiguration[];
 }
+export interface PageMilestoneInfo {
+    pageIndex?: number; // int32
+    pageSize?: number; // int32
+    totalPages?: number; // int32
+    totalHits?: number; // int32
+    content?: MilestoneInfo[];
+}
 export interface PageProduct {
     pageIndex?: number; // int32
     pageSize?: number; // int32
@@ -361,9 +388,9 @@ export interface Parameter {
     description?: string;
 }
 export namespace Parameters {
-    export type AttributeKey = string;
-    export type AttributeValue = string;
+    export type Attribute = string[];
     export type BuildDependencies = boolean;
+    export type Callback = string;
     export type ConfigId = string;
     export type DepId = string;
     export type Id = string;
