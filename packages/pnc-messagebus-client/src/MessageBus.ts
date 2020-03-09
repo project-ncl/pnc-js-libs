@@ -1,7 +1,12 @@
 import { BuildStatus } from "./dto/BuildStatus";
 import { JobNotificationProgress } from "./dto/JobNotificationProgress";
 import Notification from "./dto/Notification";
-import { isBuildChangedNotification, isGroupBuildStatusChangedNotification } from "./dto/TypeGuards";
+import {
+    isBuildChangedNotification,
+    isGenericSettingAnnouncementNotification,
+    isGenericSettingMaintenanceNotification,
+    isGroupBuildStatusChangedNotification
+} from "./dto/TypeGuards";
 import { Consumer, ListenerUnsubscriber } from "./GenericTypes";
 import { BuildListener, GroupBuildListener } from "./Listeners";
 
@@ -107,6 +112,22 @@ export default class MessageBus {
         return this.addDispatcher(notification => {
             if (isGroupBuildStatusChangedNotification(notification) && notification.groupBuild.status === status) {
                 listener(notification.groupBuild, notification);
+            }
+        });
+    }
+
+    public onGenericSettingMaintenanceChanged(listener: Consumer<any>): ListenerUnsubscriber {
+        return this.addDispatcher(notification => {
+            if (isGenericSettingMaintenanceNotification(notification)) {
+                listener(notification);
+            }
+        });
+    }
+
+    public onGenericSettingNewAnnouncement(listener: Consumer<any>): ListenerUnsubscriber {
+        return this.addDispatcher(notification => {
+            if (isGenericSettingAnnouncementNotification(notification)) {
+                listener(notification);
             }
         });
     }
