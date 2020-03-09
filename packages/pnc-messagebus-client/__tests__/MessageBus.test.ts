@@ -1,6 +1,8 @@
 import { WS } from "jest-websocket-mock";
 import BuildChangedNotification from "../src/dto/BuildChangedNotification";
 import GroupBuildStatusChangedNotification from "../src/dto/GroupBuildStatusChangedNotification";
+import GenericSettingMaintenanceNotification from "../src/dto/GenericSettingMaintenanceNotification";
+import GenericSettingAnnouncementNotification from "../src/dto/GenericSettingAnnouncementNotification";
 import MessageBus from "../src/MessageBus";
 
 
@@ -18,6 +20,10 @@ describe("MessageBus", () => {
     let mockGroupBuildInProgressNotification2: GroupBuildStatusChangedNotification;
     let mockGroupBuildPendingNotification: GroupBuildStatusChangedNotification;
 
+    let mockGenericSettingMaintenanceOnNotification : GenericSettingMaintenanceNotification;
+    let mockGenericSettingMaintenanceOffNotification : GenericSettingMaintenanceNotification;
+    let mockGenericSettingAnnouncementNotification : GenericSettingAnnouncementNotification;
+
     let mockListener: any;
 
     async function loadMocks() {
@@ -27,6 +33,9 @@ describe("MessageBus", () => {
         mockGroupBuildInProgressNotification = await import("./data/group-build-in-progress-notification.json") as GroupBuildStatusChangedNotification;
         mockGroupBuildInProgressNotification2 = await import("./data/group-build-in-progress-notification2.json") as GroupBuildStatusChangedNotification;
         mockGroupBuildPendingNotification = await import("./data/group-build-pending-notification.json") as GroupBuildStatusChangedNotification;
+        mockGenericSettingMaintenanceOffNotification = await import("./data/maintenance-mode-off-notification.json") as GenericSettingMaintenanceNotification;
+        mockGenericSettingMaintenanceOnNotification = await import("./data/maintenance-mode-on-notification.json") as GenericSettingMaintenanceNotification;
+        mockGenericSettingAnnouncementNotification = await import("./data/new-announcement-notification.json") as GenericSettingAnnouncementNotification;
         mockListener = jest.fn();
     }
 
@@ -186,7 +195,6 @@ describe("MessageBus", () => {
 
     it("should notify onGroupBuildStatusChange listeners when it receives a GROUP_BUILD_STATUS_CHANGED notification", async () => {
         messageBus.onGroupBuildStatusChange(mockListener);
-3
         server.send(mockGroupBuildInProgressNotification);
 
         expect(mockListener.mock.calls.length).toEqual(1);
@@ -208,6 +216,46 @@ describe("MessageBus", () => {
 
         server.send(mockGroupBuildInProgressNotification);
 
+        expect(mockListener.mock.calls.length).toEqual(0);
+    });
+
+    it("should notify onGenericSettingMaintenanceChanged listeners when it receives a notification with a matching status(maintenance on)", async () => {
+        messageBus.onGenericSettingMaintenanceChanged(mockListener);
+
+        server.send(mockGenericSettingMaintenanceOnNotification);
+
+        expect(mockListener.mock.calls[0][0]).toEqual(mockGenericSettingMaintenanceOnNotification);
+    });
+
+    it("should notify onGenericSettingMaintenanceChanged listeners when it receives a notification with a matching status(maintenance off)", async () => {
+        messageBus.onGenericSettingMaintenanceChanged(mockListener);
+
+        server.send(mockGenericSettingMaintenanceOffNotification);
+
+        expect(mockListener.mock.calls[0][0]).toEqual(mockGenericSettingMaintenanceOffNotification);
+    });
+
+    it("should notify onGenericSettingNewAnnouncement listeners when it receives a notification with a matching status", async () => {
+        messageBus.onGenericSettingNewAnnouncement(mockListener);
+
+        server.send(mockGenericSettingAnnouncementNotification);
+
+        expect(mockListener.mock.calls[0][0]).toEqual(mockGenericSettingAnnouncementNotification);
+        expect(mockListener.mock.calls[0][0].message).toEqual("{\"banner: \"Dennis - WS test2\"}");
+    });
+
+    it("should NOT notify onGenericSettingMaintenanceChanged listeners when it receives a notification with a non-matching status", async () => {
+        messageBus.onGenericSettingMaintenanceChanged(mockListener);
+
+        server.send(mockGenericSettingAnnouncementNotification);
+
+        expect(mockListener.mock.calls.length).toEqual(0);
+    });
+
+    it("should NOT notify onGenericSettingNewAnnouncement listeners when it receives a notification with a non-matching status", async () => {
+        messageBus.onGenericSettingNewAnnouncement(mockListener);
+
+        server.send(mockGenericSettingMaintenanceOnNotification);
         expect(mockListener.mock.calls.length).toEqual(0);
     });
 

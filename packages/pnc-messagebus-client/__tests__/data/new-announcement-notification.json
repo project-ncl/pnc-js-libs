@@ -1,0 +1,7 @@
+{
+  "job": "GENERIC_SETTING",
+  "notificationType": "NEW_ANNOUNCEMENT",
+  "progress": "FINISHED",
+  "oldProgress": "PENDING",
+  "message": "{\"banner: \"Dennis - WS test2\"}"
+}
