@@ -5,7 +5,8 @@ import {
     isBuildChangedNotification,
     isGenericSettingAnnouncementNotification,
     isGenericSettingMaintenanceNotification,
-    isGroupBuildStatusChangedNotification
+    isGroupBuildStatusChangedNotification,
+    isScmRepositoryCreationSuccessNotification
 } from "./dto/TypeGuards";
 import { Consumer, ListenerUnsubscriber } from "./GenericTypes";
 import { BuildListener, GroupBuildListener } from "./Listeners";
@@ -127,6 +128,14 @@ export default class MessageBus {
     public onGenericSettingNewAnnouncement(listener: Consumer<any>): ListenerUnsubscriber {
         return this.addDispatcher(notification => {
             if (isGenericSettingAnnouncementNotification(notification)) {
+                listener(notification);
+            }
+        });
+    }
+
+    public onScmRepositoryCreationSuccess(listener: Consumer<any>): ListenerUnsubscriber {
+        return this.addDispatcher(notification => {
+            if (isScmRepositoryCreationSuccessNotification(notification)) {
                 listener(notification);
             }
         });

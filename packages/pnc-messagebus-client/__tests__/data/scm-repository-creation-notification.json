@@ -1,0 +1,14 @@
+{
+  "scmRepository": {
+    "id": "259",
+    "internalUrl": "git+ssh://test.url.address.from.somewhere.com/example-proj/test-repo.git",
+    "externalUrl": "https://github.com/example-proj/test-repo.git",
+    "preBuildSyncEnabled": true
+  },
+  "taskId": "2",
+  "job": "SCM_REPOSITORY_CREATION",
+  "notificationType": "SCMR_CREATION_SUCCESS",
+  "progress": "FINISHED",
+  "oldProgress": "IN_PROGRESS",
+  "message": null
+}

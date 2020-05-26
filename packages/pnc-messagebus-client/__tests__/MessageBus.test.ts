@@ -3,6 +3,7 @@ import BuildChangedNotification from "../src/dto/BuildChangedNotification";
 import GroupBuildStatusChangedNotification from "../src/dto/GroupBuildStatusChangedNotification";
 import GenericSettingMaintenanceNotification from "../src/dto/GenericSettingMaintenanceNotification";
 import GenericSettingAnnouncementNotification from "../src/dto/GenericSettingAnnouncementNotification";
+import ScmRepositoryCreationNotification from "../src/dto/ScmRepositoryCreationNotification";
 import MessageBus from "../src/MessageBus";
 
 
@@ -20,9 +21,12 @@ describe("MessageBus", () => {
     let mockGroupBuildInProgressNotification2: GroupBuildStatusChangedNotification;
     let mockGroupBuildPendingNotification: GroupBuildStatusChangedNotification;
 
-    let mockGenericSettingMaintenanceOnNotification : GenericSettingMaintenanceNotification;
-    let mockGenericSettingMaintenanceOffNotification : GenericSettingMaintenanceNotification;
-    let mockGenericSettingAnnouncementNotification : GenericSettingAnnouncementNotification;
+    let mockGenericSettingMaintenanceOnNotification: GenericSettingMaintenanceNotification;
+    let mockGenericSettingMaintenanceOffNotification: GenericSettingMaintenanceNotification;
+    let mockGenericSettingAnnouncementNotification: GenericSettingAnnouncementNotification;
+
+    let mockScmRepositoryCreationNotification: ScmRepositoryCreationNotification;
+    let mockScmRepositoryCreationNotificationWrongType: ScmRepositoryCreationNotification;
 
     let mockListener: any;
 
@@ -36,6 +40,9 @@ describe("MessageBus", () => {
         mockGenericSettingMaintenanceOffNotification = await import("./data/maintenance-mode-off-notification.json") as GenericSettingMaintenanceNotification;
         mockGenericSettingMaintenanceOnNotification = await import("./data/maintenance-mode-on-notification.json") as GenericSettingMaintenanceNotification;
         mockGenericSettingAnnouncementNotification = await import("./data/new-announcement-notification.json") as GenericSettingAnnouncementNotification;
+        mockScmRepositoryCreationNotification = await import("./data/scm-repository-creation-notification.json") as ScmRepositoryCreationNotification;
+        mockScmRepositoryCreationNotificationWrongType = await import("./data/scm-repository-creation-notification2.json") as ScmRepositoryCreationNotification;
+
         mockListener = jest.fn();
     }
 
@@ -75,7 +82,7 @@ describe("MessageBus", () => {
     it("should notify onMessage listeners of any messages received", async () => {
         messageBus.onMessage(mockListener);
 
-        server.send(JSON.stringify({ test: "value "}));
+        server.send(JSON.stringify({ test: "value " }));
         server.send(mockBuildInProgressNotification);
         server.send(mockGroupBuildInProgressNotification);
 
@@ -259,4 +266,25 @@ describe("MessageBus", () => {
         expect(mockListener.mock.calls.length).toEqual(0);
     });
 
+    it("should notify onScmRepositoryCreationSuccess listeners when it receives a notification with a matching notification type(SCMR_CREATION_SUCCESS)", async () => {
+        messageBus.onScmRepositoryCreationSuccess(mockListener);
+
+        server.send(mockScmRepositoryCreationNotification);
+
+        expect(mockListener.mock.calls[0][0]).toEqual(mockScmRepositoryCreationNotification);
+    });
+
+    it("should NOT notify onScmRepositoryCreationSuccess listeners when it receives a notification with a non-matching notification type", async () => {
+        messageBus.onScmRepositoryCreationSuccess(mockListener);
+
+        server.send(mockScmRepositoryCreationNotificationWrongType);
+        expect(mockListener.mock.calls.length).toEqual(0);
+    });
+
+    it("should NOT notify onScmRepositoryCreationSuccess listeners when it receives other notifications", async () => {
+        messageBus.onScmRepositoryCreationSuccess(mockListener);
+
+        server.send(mockGenericSettingAnnouncementNotification);
+        expect(mockListener.mock.calls.length).toEqual(0);
+    });
 });
