@@ -1,3 +1,7 @@
+export interface AlignmentParameters {
+    buildType?: string;
+    parameters?: string;
+}
 export interface Artifact {
     id: string;
     identifier: string;
@@ -15,10 +19,6 @@ export interface Artifact {
     targetRepository?: TargetRepository;
     build?: Build;
 }
-export interface ArtifactImportError {
-    artifactId?: string;
-    errorMessage?: string;
-}
 export interface ArtifactPage {
     pageIndex?: number; // int32
     pageSize?: number; // int32
@@ -35,7 +35,7 @@ export interface Build {
     startTime?: number; // int64
     endTime?: number; // int64
     progress?: "PENDING" | "IN_PROGRESS" | "FINISHED";
-    status?: "SUCCESS" | "FAILED" | "NO_REBUILD_REQUIRED" | "WAITING_FOR_DEPENDENCIES" | "BUILDING" | "REJECTED" | "REJECTED_FAILED_DEPENDENCIES" | "CANCELLED" | "SYSTEM_ERROR" | "NEW";
+    status?: "SUCCESS" | "FAILED" | "NO_REBUILD_REQUIRED" | "ENQUEUED" | "WAITING_FOR_DEPENDENCIES" | "BUILDING" | "REJECTED" | "REJECTED_FAILED_DEPENDENCIES" | "CANCELLED" | "SYSTEM_ERROR" | "NEW";
     buildContentId?: string;
     temporaryBuild?: boolean;
     scmUrl?: string;
@@ -99,6 +99,8 @@ export interface BuildConfiguration {
     parameters?: {
         [name: string]: string;
     };
+    creationUser?: User;
+    modificationUser?: User;
 }
 export interface BuildConfigurationRef {
     id: string;
@@ -115,7 +117,6 @@ export interface BuildConfigurationRevision {
     id: string;
     rev?: number; // int32
     name?: string;
-    description?: string;
     buildScript?: string;
     scmRevision?: string;
     creationTime?: number; // int64
@@ -127,12 +128,13 @@ export interface BuildConfigurationRevision {
     parameters?: {
         [name: string]: string;
     };
+    creationUser?: User;
+    modificationUser?: User;
 }
 export interface BuildConfigurationRevisionRef {
     id: string;
     rev?: number; // int32
     name?: string;
-    description?: string;
     buildScript?: string;
     scmRevision?: string;
     creationTime?: number; // int64
@@ -153,7 +155,7 @@ export interface BuildPage {
     totalHits?: number; // int32
     content?: Build[];
 }
-export interface BuildPushRequest {
+export interface BuildPushParameters {
     tagPrefix?: string;
     reimport?: boolean;
 }
@@ -161,17 +163,20 @@ export interface BuildPushResult {
     id: string;
     buildId: string;
     status: "ACCEPTED" | "SUCCESS" | "REJECTED" | "FAILED" | "SYSTEM_ERROR" | "CANCELED";
-    log: string;
-    artifactImportErrors?: ArtifactImportError[];
     brewBuildId?: number; // int32
     brewBuildUrl?: string;
+    logContext?: string;
+    message?: string;
+    productMilestoneCloseResult?: ProductMilestoneCloseResultRef;
 }
-export interface BuildPushResultPage {
-    pageIndex?: number; // int32
-    pageSize?: number; // int32
-    totalPages?: number; // int32
-    totalHits?: number; // int32
-    content?: BuildPushResult[];
+export interface BuildPushResultRef {
+    id: string;
+    buildId: string;
+    status: "ACCEPTED" | "SUCCESS" | "REJECTED" | "FAILED" | "SYSTEM_ERROR" | "CANCELED";
+    brewBuildId?: number; // int32
+    brewBuildUrl?: string;
+    logContext?: string;
+    message?: string;
 }
 export interface BuildsGraph {
     vertices?: {
@@ -222,7 +227,7 @@ export interface GroupBuild {
     id: string;
     startTime?: number; // int64
     endTime?: number; // int64
-    status?: "SUCCESS" | "FAILED" | "NO_REBUILD_REQUIRED" | "WAITING_FOR_DEPENDENCIES" | "BUILDING" | "REJECTED" | "REJECTED_FAILED_DEPENDENCIES" | "CANCELLED" | "SYSTEM_ERROR" | "NEW";
+    status?: "SUCCESS" | "FAILED" | "NO_REBUILD_REQUIRED" | "ENQUEUED" | "WAITING_FOR_DEPENDENCIES" | "BUILDING" | "REJECTED" | "REJECTED_FAILED_DEPENDENCIES" | "CANCELLED" | "SYSTEM_ERROR" | "NEW";
     temporaryBuild?: boolean;
     groupConfig?: GroupConfigurationRef;
     user?: User;
@@ -242,7 +247,7 @@ export interface GroupBuildRef {
     id: string;
     startTime?: number; // int64
     endTime?: number; // int64
-    status?: "SUCCESS" | "FAILED" | "NO_REBUILD_REQUIRED" | "WAITING_FOR_DEPENDENCIES" | "BUILDING" | "REJECTED" | "REJECTED_FAILED_DEPENDENCIES" | "CANCELLED" | "SYSTEM_ERROR" | "NEW";
+    status?: "SUCCESS" | "FAILED" | "NO_REBUILD_REQUIRED" | "ENQUEUED" | "WAITING_FOR_DEPENDENCIES" | "BUILDING" | "REJECTED" | "REJECTED_FAILED_DEPENDENCIES" | "CANCELLED" | "SYSTEM_ERROR" | "NEW";
     temporaryBuild?: boolean;
 }
 export interface GroupBuildRequest {
@@ -357,6 +362,13 @@ export interface PageProductMilestone {
     totalHits?: number; // int32
     content?: ProductMilestone[];
 }
+export interface PageProductMilestoneCloseResult {
+    pageIndex?: number; // int32
+    pageSize?: number; // int32
+    totalPages?: number; // int32
+    totalHits?: number; // int32
+    content?: ProductMilestoneCloseResult[];
+}
 export interface PageProductRelease {
     pageIndex?: number; // int32
     pageSize?: number; // int32
@@ -412,7 +424,7 @@ export namespace Parameters {
     export type Sha1 = string;
     export type Sha256 = string;
     export type Sort = string;
-    export type Status = "SUCCESS" | "FAILED" | "NO_REBUILD_REQUIRED" | "WAITING_FOR_DEPENDENCIES" | "BUILDING" | "REJECTED" | "REJECTED_FAILED_DEPENDENCIES" | "CANCELLED" | "SYSTEM_ERROR" | "NEW";
+    export type Status = "SUCCESS" | "FAILED" | "NO_REBUILD_REQUIRED" | "ENQUEUED" | "WAITING_FOR_DEPENDENCIES" | "BUILDING" | "REJECTED" | "REJECTED_FAILED_DEPENDENCIES" | "CANCELLED" | "SYSTEM_ERROR" | "NEW";
     export type TemporaryBuild = boolean;
     export type TimestampAlignment = boolean;
     export type Url = string;
@@ -423,11 +435,11 @@ export interface PathParameters {
 }
 export interface Product {
     id: string;
-    name?: string;
+    name: string;
     description?: string;
     abbreviation: string; // [a-zA-Z0-9-]+
-    productCode?: string;
-    pgmSystemName?: string;
+    productManagers?: string;
+    productPagesCode?: string;
     productVersions?: {
         [name: string]: ProductVersionRef;
     };
@@ -442,6 +454,27 @@ export interface ProductMilestone {
     issueTrackerUrl?: string;
     productVersion?: ProductVersionRef;
     productRelease?: ProductReleaseRef;
+}
+export interface ProductMilestoneCloseResult {
+    id?: string;
+    status?: "IN_PROGRESS" | "FAILED" | "SUCCEEDED" | "CANCELED" | "SYSTEM_ERROR";
+    startingDate?: number; // int64
+    endDate?: number; // int64
+    milestone?: ProductMilestoneRef;
+    buildPushResults?: BuildPushResultRef[];
+}
+export interface ProductMilestoneCloseResultPage {
+    pageIndex?: number; // int32
+    pageSize?: number; // int32
+    totalPages?: number; // int32
+    totalHits?: number; // int32
+    content?: ProductMilestoneCloseResult[];
+}
+export interface ProductMilestoneCloseResultRef {
+    id?: string;
+    status?: "IN_PROGRESS" | "FAILED" | "SUCCEEDED" | "CANCELED" | "SYSTEM_ERROR";
+    startingDate?: number; // int64
+    endDate?: number; // int64
 }
 export interface ProductMilestonePage {
     pageIndex?: number; // int32
@@ -468,11 +501,11 @@ export interface ProductPage {
 }
 export interface ProductRef {
     id: string;
-    name?: string;
+    name: string;
     description?: string;
     abbreviation: string; // [a-zA-Z0-9-]+
-    productCode?: string;
-    pgmSystemName?: string;
+    productManagers?: string;
+    productPagesCode?: string;
 }
 export interface ProductRelease {
     id: string;
@@ -481,6 +514,8 @@ export interface ProductRelease {
     releaseDate?: number; // int64
     downloadUrl?: string;
     issueTrackerUrl?: string;
+    commonPlatformEnumeration?: string;
+    productPagesCode?: string;
     productVersion?: ProductVersionRef;
     productMilestone?: ProductMilestoneRef;
 }
@@ -498,6 +533,8 @@ export interface ProductReleaseRef {
     releaseDate?: number; // int64
     downloadUrl?: string;
     issueTrackerUrl?: string;
+    commonPlatformEnumeration?: string;
+    productPagesCode?: string;
 }
 export interface ProductVersion {
     id: string;
@@ -540,6 +577,8 @@ export interface Project {
     description?: string;
     issueTrackerUrl?: string;
     projectUrl?: string;
+    engineeringTeam?: string;
+    technicalLeader?: string;
     buildConfigs?: {
         [name: string]: BuildConfigurationRef;
     };
@@ -557,6 +596,8 @@ export interface ProjectRef {
     description?: string;
     issueTrackerUrl?: string;
     projectUrl?: string;
+    engineeringTeam?: string;
+    technicalLeader?: string;
 }
 export interface QueryParameters {
     pageIndex?: Parameters.PageIndex; // int32
@@ -576,6 +617,7 @@ export namespace Responses {
     export type $201 = Project;
     export type $202 = RepositoryCreationResponse;
     export type $400 = ErrorResponse;
+    export type $403 = ErrorResponse;
     export type $409 = ErrorResponse;
     export type $500 = ErrorResponse;
 }
@@ -606,6 +648,15 @@ export interface TargetRepository {
 export interface User {
     id: string;
     username?: string;
+}
+export interface ValidationResponse {
+    isValid: boolean;
+    errorType?: "FORMAT" | "DUPLICATION";
+    hints?: string[];
+}
+export interface VersionValidationRequest {
+    productVersionId: string;
+    version: string;
 }
 export interface VertexBuild {
     name?: string;
