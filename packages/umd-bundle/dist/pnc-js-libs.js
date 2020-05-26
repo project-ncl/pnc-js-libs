@@ -16,6 +16,9 @@
     function isGenericSettingAnnouncementNotification(notification) {
         return notification.job === "GENERIC_SETTING" && notification.notificationType === "NEW_ANNOUNCEMENT";
     }
+    function isScmRepositoryCreationSuccessNotification(notification) {
+        return notification.job === "SCM_REPOSITORY_CREATION" && notification.notificationType === "SCMR_CREATION_SUCCESS";
+    }
 
     class MessageBus {
         constructor(url) {
@@ -114,6 +117,13 @@
         onGenericSettingNewAnnouncement(listener) {
             return this.addDispatcher(notification => {
                 if (isGenericSettingAnnouncementNotification(notification)) {
+                    listener(notification);
+                }
+            });
+        }
+        onScmRepositoryCreationSuccess(listener) {
+            return this.addDispatcher(notification => {
+                if (isScmRepositoryCreationSuccessNotification(notification)) {
                     listener(notification);
                 }
             });
