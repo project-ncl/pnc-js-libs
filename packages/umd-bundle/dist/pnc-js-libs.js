@@ -19,6 +19,9 @@
     function isScmRepositoryCreationSuccessNotification(notification) {
         return notification.job === "SCM_REPOSITORY_CREATION" && notification.notificationType === "SCMR_CREATION_SUCCESS";
     }
+    function isBuildPushResultNotification(notification) {
+        return notification.job === "BREW_PUSH" && notification.notificationType === "BREW_PUSH_RESULT";
+    }
 
     class MessageBus {
         constructor(url) {
@@ -125,6 +128,13 @@
             return this.addDispatcher(notification => {
                 if (isScmRepositoryCreationSuccessNotification(notification)) {
                     listener(notification);
+                }
+            });
+        }
+        onBuildPushStatusChange(listener) {
+            return this.addDispatcher(notification => {
+                if (isBuildPushResultNotification(notification)) {
+                    listener(notification.buildPushResult, notification);
                 }
             });
         }

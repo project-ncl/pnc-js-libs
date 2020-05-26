@@ -1,4 +1,5 @@
 import BuildChangedNotification from "./BuildChangedNotification";
+import BuildPushResultNotification from "./BuildPushResultNotification";
 import GenericSettingAnnouncementNotification from "./GenericSettingAnnouncementNotification";
 import GenericSettingMaintenanceNotification from "./GenericSettingMaintenanceNotification";
 import GroupBuildStatusChangedNotification from "./GroupBuildStatusChangedNotification";
@@ -25,4 +26,8 @@ export function isGenericSettingAnnouncementNotification(notification: Notificat
 
 export function isScmRepositoryCreationSuccessNotification(notification: Notification): notification is ScmRepositoryCreationNotification {
     return notification.job === "SCM_REPOSITORY_CREATION" && notification.notificationType === "SCMR_CREATION_SUCCESS";
+}
+
+export function isBuildPushResultNotification(notification: Notification): notification is BuildPushResultNotification {
+    return notification.job === "BREW_PUSH" && notification.notificationType === "BREW_PUSH_RESULT";
 }

@@ -3,13 +3,14 @@ import { JobNotificationProgress } from "./dto/JobNotificationProgress";
 import Notification from "./dto/Notification";
 import {
     isBuildChangedNotification,
+    isBuildPushResultNotification,
     isGenericSettingAnnouncementNotification,
     isGenericSettingMaintenanceNotification,
     isGroupBuildStatusChangedNotification,
     isScmRepositoryCreationSuccessNotification
 } from "./dto/TypeGuards";
 import { Consumer, ListenerUnsubscriber } from "./GenericTypes";
-import { BuildListener, GroupBuildListener } from "./Listeners";
+import { BuildListener, BuildPushListener, GroupBuildListener } from "./Listeners";
 
 type Dispatcher = (notification: Notification) => void;
 export default class MessageBus {
@@ -137,6 +138,14 @@ export default class MessageBus {
         return this.addDispatcher(notification => {
             if (isScmRepositoryCreationSuccessNotification(notification)) {
                 listener(notification);
+            }
+        });
+    }
+
+    public onBuildPushStatusChange(listener: BuildPushListener): ListenerUnsubscriber {
+        return this.addDispatcher(notification => {
+            if (isBuildPushResultNotification(notification)) {
+                listener(notification.buildPushResult, notification);
             }
         });
     }

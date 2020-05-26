@@ -5,7 +5,7 @@ export interface AlignmentParameters {
 export interface Artifact {
     id: string;
     identifier: string;
-    artifactQuality?: "NEW" | "VERIFIED" | "TESTED" | "DEPRECATED" | "BLACKLISTED" | "DELETED" | "TEMPORARY";
+    artifactQuality: "NEW" | "VERIFIED" | "TESTED" | "DEPRECATED" | "BLACKLISTED" | "DELETED" | "TEMPORARY";
     md5?: string;
     sha1?: string;
     sha256?: string;
@@ -16,8 +16,13 @@ export interface Artifact {
     size?: number; // int64
     deployUrl?: string;
     publicUrl?: string;
+    creationTime?: number; // int64
+    modificationTime?: number; // int64
+    qualityLevelReason?: string;
     targetRepository?: TargetRepository;
     build?: Build;
+    creationUser?: User;
+    modificationUser?: User;
 }
 export interface ArtifactPage {
     pageIndex?: number; // int32
@@ -25,6 +30,21 @@ export interface ArtifactPage {
     totalPages?: number; // int32
     totalHits?: number; // int32
     content?: Artifact[];
+}
+export interface ArtifactRevision {
+    id: string;
+    rev?: number; // int32
+    qualityLevelReason?: string;
+    modificationTime?: number; // int64
+    artifactQuality?: "NEW" | "VERIFIED" | "TESTED" | "DEPRECATED" | "BLACKLISTED" | "DELETED" | "TEMPORARY";
+    modificationUser?: User;
+}
+export interface ArtifactRevisionPage {
+    pageIndex?: number; // int32
+    pageSize?: number; // int32
+    totalPages?: number; // int32
+    totalHits?: number; // int32
+    content?: ArtifactRevision[];
 }
 export interface Banner {
     banner?: string;
@@ -84,7 +104,6 @@ export interface BuildConfiguration {
     scmRevision?: string;
     creationTime?: number; // int64
     modificationTime?: number; // int64
-    archived?: boolean;
     buildType: "MVN" | "NPM" | "GRADLE";
     scmRepository?: SCMRepository;
     project?: ProjectRef;
@@ -110,7 +129,6 @@ export interface BuildConfigurationRef {
     scmRevision?: string;
     creationTime?: number; // int64
     modificationTime?: number; // int64
-    archived?: boolean;
     buildType: "MVN" | "NPM" | "GRADLE";
 }
 export interface BuildConfigurationRevision {
@@ -299,6 +317,13 @@ export interface PageArtifact {
     totalHits?: number; // int32
     content?: Artifact[];
 }
+export interface PageArtifactRevision {
+    pageIndex?: number; // int32
+    pageSize?: number; // int32
+    totalPages?: number; // int32
+    totalHits?: number; // int32
+    content?: ArtifactRevision[];
+}
 export interface PageBuild {
     pageIndex?: number; // int32
     pageSize?: number; // int32
@@ -403,6 +428,7 @@ export interface Parameter {
 }
 export namespace Parameters {
     export type Attribute = string[];
+    export type BuildConfigName = string;
     export type BuildDependencies = boolean;
     export type BuildType = string;
     export type Callback = string;
@@ -450,8 +476,6 @@ export interface ProductMilestone {
     endDate?: number; // int64
     startingDate?: number; // int64
     plannedEndDate?: number; // int64
-    downloadUrl?: string;
-    issueTrackerUrl?: string;
     productVersion?: ProductVersionRef;
     productRelease?: ProductReleaseRef;
 }
@@ -489,8 +513,6 @@ export interface ProductMilestoneRef {
     endDate?: number; // int64
     startingDate?: number; // int64
     plannedEndDate?: number; // int64
-    downloadUrl?: string;
-    issueTrackerUrl?: string;
 }
 export interface ProductPage {
     pageIndex?: number; // int32
@@ -512,8 +534,6 @@ export interface ProductRelease {
     version?: string;
     supportLevel?: "UNRELEASED" | "EARLYACCESS" | "SUPPORTED" | "EXTENDED_SUPPORT" | "EOL";
     releaseDate?: number; // int64
-    downloadUrl?: string;
-    issueTrackerUrl?: string;
     commonPlatformEnumeration?: string;
     productPagesCode?: string;
     productVersion?: ProductVersionRef;
@@ -531,8 +551,6 @@ export interface ProductReleaseRef {
     version?: string;
     supportLevel?: "UNRELEASED" | "EARLYACCESS" | "SUPPORTED" | "EXTENDED_SUPPORT" | "EOL";
     releaseDate?: number; // int64
-    downloadUrl?: string;
-    issueTrackerUrl?: string;
     commonPlatformEnumeration?: string;
     productPagesCode?: string;
 }
@@ -606,6 +624,7 @@ export interface QueryParameters {
     q?: Parameters.Q;
     latest?: Parameters.Latest;
     running?: Parameters.Running;
+    buildConfigName?: Parameters.BuildConfigName;
 }
 export interface RepositoryCreationResponse {
     taskId?: number; // int32

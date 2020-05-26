@@ -1,8 +1,9 @@
 import { WS } from "jest-websocket-mock";
 import BuildChangedNotification from "../src/dto/BuildChangedNotification";
-import GroupBuildStatusChangedNotification from "../src/dto/GroupBuildStatusChangedNotification";
-import GenericSettingMaintenanceNotification from "../src/dto/GenericSettingMaintenanceNotification";
+import BuildPushResultNotification from "../src/dto/BuildPushResultNotification";
 import GenericSettingAnnouncementNotification from "../src/dto/GenericSettingAnnouncementNotification";
+import GenericSettingMaintenanceNotification from "../src/dto/GenericSettingMaintenanceNotification";
+import GroupBuildStatusChangedNotification from "../src/dto/GroupBuildStatusChangedNotification";
 import ScmRepositoryCreationNotification from "../src/dto/ScmRepositoryCreationNotification";
 import MessageBus from "../src/MessageBus";
 
@@ -28,6 +29,8 @@ describe("MessageBus", () => {
     let mockScmRepositoryCreationNotification: ScmRepositoryCreationNotification;
     let mockScmRepositoryCreationNotificationWrongType: ScmRepositoryCreationNotification;
 
+    let mockBuildPushResultNotification: BuildPushResultNotification;
+
     let mockListener: any;
 
     async function loadMocks() {
@@ -42,7 +45,7 @@ describe("MessageBus", () => {
         mockGenericSettingAnnouncementNotification = await import("./data/new-announcement-notification.json") as GenericSettingAnnouncementNotification;
         mockScmRepositoryCreationNotification = await import("./data/scm-repository-creation-notification.json") as ScmRepositoryCreationNotification;
         mockScmRepositoryCreationNotificationWrongType = await import("./data/scm-repository-creation-notification2.json") as ScmRepositoryCreationNotification;
-
+        mockBuildPushResultNotification = await import("./data/build-push-notification-success-1.json") as BuildPushResultNotification;
         mockListener = jest.fn();
     }
 
@@ -285,6 +288,22 @@ describe("MessageBus", () => {
         messageBus.onScmRepositoryCreationSuccess(mockListener);
 
         server.send(mockGenericSettingAnnouncementNotification);
+        expect(mockListener.mock.calls.length).toEqual(0);
+    });
+
+    it("should notify onBuildPushStatusChange listeners when it receives a BuildPushResult notification", async () => {
+        messageBus.onBuildPushStatusChange(mockListener);
+
+        server.send(mockBuildPushResultNotification);
+        expect(mockListener.mock.calls.length).toEqual(1);
+        expect(mockListener.mock.calls[0][0]).toEqual(mockBuildPushResultNotification.buildPushResult);
+        expect(mockListener.mock.calls[0][1]).toEqual(mockBuildPushResultNotification);
+    });
+
+    it("should NOT notify onBuildPushStatusChange listeners when it receives a non-BuildPushResult notification", async () => {
+        messageBus.onBuildPushStatusChange(mockListener);
+
+        server.send(mockBuildInProgressNotification);
         expect(mockListener.mock.calls.length).toEqual(0);
     });
 });

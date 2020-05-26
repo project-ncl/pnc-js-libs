@@ -1,0 +1,17 @@
+{
+  "buildPushResult": {
+    "brewBuildId": 1002,
+    "brewBuildUrl": "http://mockurl.mock/1002",
+    "buildId": "1001",
+    "id": "1000",
+    "logContext": "1003",
+    "message": "test",
+    "productMilestoneCloseResult": null,
+    "status": "CANCELED"
+  },
+  "job": "BREW_PUSH",
+  "message": "test",
+  "notificationType": "BREW_PUSH_RESULT",
+  "oldProgress": "IN_PROGRESS",
+  "progress": "FINISHED"
+}
