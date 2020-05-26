@@ -2,8 +2,8 @@ import BuildChangedNotification from "./BuildChangedNotification";
 import GenericSettingAnnouncementNotification from "./GenericSettingAnnouncementNotification";
 import GenericSettingMaintenanceNotification from "./GenericSettingMaintenanceNotification";
 import GroupBuildStatusChangedNotification from "./GroupBuildStatusChangedNotification";
-import ScmRepositoryCreationNotification from "./ScmRepositoryCreationNotification";
 import Notification from "./Notification";
+import ScmRepositoryCreationNotification from "./ScmRepositoryCreationNotification";
 
 
 export function isBuildChangedNotification(notification: Notification): notification is BuildChangedNotification {
