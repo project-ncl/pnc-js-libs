@@ -16,7 +16,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "dtsgenerator": "^2.3.2",
-    "replace": "^1.1.1"
+    "replace": "^1.2.0"
   },
   "types": "index.d.ts",
   "scripts": {
@@ -27,6 +27,6 @@
     "build": "npm run clean && npm run generate:openapi && npm run generate:dts"
   },
   "dependencies": {
-    "npx": "^10.2.0"
+    "npx": "^10.2.2"
   }
 }
