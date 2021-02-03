@@ -7,10 +7,11 @@ import {
     isGenericSettingAnnouncementNotification,
     isGenericSettingMaintenanceNotification,
     isGroupBuildStatusChangedNotification,
+    isMilestonePushResultNotification,
     isScmRepositoryCreationSuccessNotification
 } from "./dto/TypeGuards";
 import { Consumer, ListenerUnsubscriber } from "./GenericTypes";
-import { BuildListener, BuildPushListener, GroupBuildListener } from "./Listeners";
+import { BuildListener, BuildPushListener, GroupBuildListener, MilestonePushListener } from "./Listeners";
 
 type Dispatcher = (notification: Notification) => void;
 export default class MessageBus {
@@ -146,6 +147,14 @@ export default class MessageBus {
         return this.addDispatcher(notification => {
             if (isBuildPushResultNotification(notification)) {
                 listener(notification.buildPushResult, notification);
+            }
+        });
+    }
+
+    public onMilestonePushStatusChange(listener: MilestonePushListener): ListenerUnsubscriber {
+        return this.addDispatcher(notification => {
+            if (isMilestonePushResultNotification(notification)) {
+                listener(notification.productMilestoneCloseResult, notification);
             }
         });
     }

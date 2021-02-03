@@ -1,0 +1,31 @@
+{
+  "productMilestoneCloseResult": {
+    "id": "1000",
+    "status": "SUCCEEDED",
+    "startingDate": "2021-02-09T11:42:22.592Z",
+    "endDate": "2021-02-09T11:42:22.592Z",
+    "milestone": {
+      "id": "1001",
+      "version": "2",
+      "endDate": "2021-02-09T11:42:22.592Z",
+      "startingDate": "2021-02-09T11:42:22.592Z",
+      "plannedEndDate": "2021-02-09T11:42:22.592Z"
+    },
+    "buildPushResults": [
+      {
+        "id": "1002",
+        "buildId": "1003",
+        "status": "ACCEPTED",
+        "brewBuildId": 0,
+        "brewBuildUrl": "http://mockurl.mock/1002",
+        "logContext": "1002",
+        "message": "string"
+      }
+    ]
+  },
+  "job": "PRODUCT_MILESTONE_CLOSE",
+  "message": "test",
+  "notificationType": "PRODUCT_MILESTONE_CLOSE_RESULT",
+  "oldProgress": "IN_PROGRESS",
+  "progress": "FINISHED"
+}

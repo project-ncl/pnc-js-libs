@@ -3,6 +3,7 @@ import BuildPushResultNotification from "./BuildPushResultNotification";
 import GenericSettingAnnouncementNotification from "./GenericSettingAnnouncementNotification";
 import GenericSettingMaintenanceNotification from "./GenericSettingMaintenanceNotification";
 import GroupBuildStatusChangedNotification from "./GroupBuildStatusChangedNotification";
+import MilestonePushResultNotification from "./MilestonePushResultNotification";
 import Notification from "./Notification";
 import ScmRepositoryCreationNotification from "./ScmRepositoryCreationNotification";
 
@@ -30,4 +31,8 @@ export function isScmRepositoryCreationSuccessNotification(notification: Notific
 
 export function isBuildPushResultNotification(notification: Notification): notification is BuildPushResultNotification {
     return notification.job === "BREW_PUSH" && notification.notificationType === "BREW_PUSH_RESULT";
+}
+
+export function isMilestonePushResultNotification(notification: Notification): notification is MilestonePushResultNotification {
+    return notification.job === "PRODUCT_MILESTONE_CLOSE" && notification.notificationType === "PRODUCT_MILESTONE_CLOSE_RESULT";
 }

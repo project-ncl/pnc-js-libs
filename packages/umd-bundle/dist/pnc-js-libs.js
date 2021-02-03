@@ -22,6 +22,9 @@
     function isBuildPushResultNotification(notification) {
         return notification.job === "BREW_PUSH" && notification.notificationType === "BREW_PUSH_RESULT";
     }
+    function isMilestonePushResultNotification(notification) {
+        return notification.job === "PRODUCT_MILESTONE_CLOSE" && notification.notificationType === "PRODUCT_MILESTONE_CLOSE_RESULT";
+    }
 
     class MessageBus {
         constructor(url) {
@@ -135,6 +138,13 @@
             return this.addDispatcher(notification => {
                 if (isBuildPushResultNotification(notification)) {
                     listener(notification.buildPushResult, notification);
+                }
+            });
+        }
+        onMilestonePushStatusChange(listener) {
+            return this.addDispatcher(notification => {
+                if (isMilestonePushResultNotification(notification)) {
+                    listener(notification.productMilestoneCloseResult, notification);
                 }
             });
         }

@@ -2,7 +2,7 @@
   "oldStatus": "NEW",
   "build": {
     "id": "396",
-    "submitTime": 1575038025.134,
+    "submitTime": "1575038025.134",
     "status": "BUILDING",
     "buildContentId": "build-396",
     "temporaryBuild": false,
@@ -42,8 +42,8 @@
       "description": "Description of test config",
       "buildScript": "mvn deploy -DskipTests",
       "scmRevision": "master",
-      "creationTime": 1575038003.372,
-      "modificationTime": 1575038003.373,
+      "creationTime": "1575038003.372",
+      "modificationTime": "1575038003.373",
       "buildType": "MVN"
     }
   },
