@@ -1,7 +1,8 @@
-import { Build, BuildPushResult, GroupBuild } from "@project-ncl/pnc-dto-types";
+import { Build, BuildPushResult, GroupBuild, ProductMilestoneCloseResult } from "@project-ncl/pnc-dto-types";
 import BuildChangedNotification from "./dto/BuildChangedNotification";
 import BuildPushResultNotification from "./dto/BuildPushResultNotification";
 import GroupBuildStatusChangedNotification from "./dto/GroupBuildStatusChangedNotification";
+import MilestonePushResultNotification from "./dto/MilestonePushResultNotification";
 import Notification from "./dto/Notification";
 import { Entity } from "./GenericTypes";
 
@@ -17,4 +18,8 @@ export interface GroupBuildListener extends SingleEntityConsumerListener<GroupBu
 
 export interface BuildPushListener extends SingleEntityConsumerListener<BuildPushResult, BuildPushResultNotification> {
     (entity: BuildPushResult, notification: BuildPushResultNotification): void;
+}
+
+export interface MilestonePushListener extends SingleEntityConsumerListener<ProductMilestoneCloseResult, MilestonePushResultNotification> {
+    (entity: ProductMilestoneCloseResult, notification: MilestonePushResultNotification): void;
 }

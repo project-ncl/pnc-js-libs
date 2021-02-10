@@ -4,6 +4,7 @@ import BuildPushResultNotification from "../src/dto/BuildPushResultNotification"
 import GenericSettingAnnouncementNotification from "../src/dto/GenericSettingAnnouncementNotification";
 import GenericSettingMaintenanceNotification from "../src/dto/GenericSettingMaintenanceNotification";
 import GroupBuildStatusChangedNotification from "../src/dto/GroupBuildStatusChangedNotification";
+import MilestonePushResultNotification from "../src/dto/MilestonePushResultNotification";
 import ScmRepositoryCreationNotification from "../src/dto/ScmRepositoryCreationNotification";
 import MessageBus from "../src/MessageBus";
 
@@ -31,6 +32,8 @@ describe("MessageBus", () => {
 
     let mockBuildPushResultNotification: BuildPushResultNotification;
 
+    let mockMilestonePushResultNotification: MilestonePushResultNotification;
+
     let mockListener: any;
 
     async function loadMocks() {
@@ -46,6 +49,7 @@ describe("MessageBus", () => {
         mockScmRepositoryCreationNotification = await import("./data/scm-repository-creation-notification.json") as ScmRepositoryCreationNotification;
         mockScmRepositoryCreationNotificationWrongType = await import("./data/scm-repository-creation-notification2.json") as ScmRepositoryCreationNotification;
         mockBuildPushResultNotification = await import("./data/build-push-notification-success-1.json") as BuildPushResultNotification;
+        mockMilestonePushResultNotification = await import("./data/milestone-push-notification-success-1.json") as MilestonePushResultNotification;
         mockListener = jest.fn();
     }
 
@@ -306,4 +310,20 @@ describe("MessageBus", () => {
         server.send(mockBuildInProgressNotification);
         expect(mockListener.mock.calls.length).toEqual(0);
     });
+
+    it("should notify onMilestonePushStatusChange listeners when it receives a MilestonePushResult notification", async () => {
+        messageBus.onMilestonePushStatusChange(mockListener);
+
+        server.send(mockMilestonePushResultNotification);
+        expect(mockListener.mock.calls.length).toEqual(1);
+        expect(mockListener.mock.calls[0][0]).toEqual(mockMilestonePushResultNotification.productMilestoneCloseResult);
+        expect(mockListener.mock.calls[0][1]).toEqual(mockMilestonePushResultNotification);
+    });
+    
+    it("should NOT notify onMilestonePushStatusChange listeners when it receives a non-MilestonePushResult notification", async () => {
+        messageBus.onMilestonePushStatusChange(mockListener);
+
+        server.send(mockBuildInProgressNotification);
+        expect(mockListener.mock.calls.length).toEqual(0);
+    })
 });
