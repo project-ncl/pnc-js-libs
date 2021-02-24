@@ -1,6 +1,6 @@
 {
   "name": "@project-ncl/pnc-dto-types",
-  "version": "0.1.0-ER.1",
+  "version": "2.0.0",
   "description": "TypeScript definitions of PNC DTOs used by its REST API.",
   "repository": {
     "type": "git",
