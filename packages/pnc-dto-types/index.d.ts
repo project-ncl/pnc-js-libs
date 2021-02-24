@@ -242,6 +242,9 @@ export interface CreateAndSyncSCMRequest {
     preBuildSyncEnabled?: boolean;
     scmUrl: string;
 }
+export interface DeliverablesAnalysisRequest {
+    sourcesLink: string[];
+}
 export interface EdgeBuild {
     cost?: number; // int32
     source?: string;
@@ -680,14 +683,8 @@ export namespace Responses {
     export type $200 = BuildPage;
     export type $201 = RepositoryCreationResponse;
     export type $202 = RepositoryCreationResponse;
-    export interface $204 {
-    }
-    export interface $302 {
-    }
     export type $400 = ErrorResponse;
     export type $403 = ErrorResponse;
-    export interface $404 {
-    }
     export type $409 = ErrorResponse;
     export type $500 = ErrorResponse;
 }

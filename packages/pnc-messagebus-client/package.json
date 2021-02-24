@@ -1,6 +1,6 @@
 {
   "name": "@project-ncl/pnc-messagebus-client",
-  "version": "0.1.0-ER.1",
+  "version": "2.0.0",
   "description": "Client library for consuming PNC WebSocket notifications",
   "repository": {
     "type": "git",
@@ -44,6 +44,6 @@
     "typescript": "^3.7.2"
   },
   "dependencies": {
-    "@project-ncl/pnc-dto-types": "^0.1.0-ER.1"
+    "@project-ncl/pnc-dto-types": "^2.0.0"
   }
 }
