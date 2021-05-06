@@ -5,6 +5,7 @@ export interface AlignmentParameters {
 export interface Artifact {
     artifactQuality: "NEW" | "VERIFIED" | "TESTED" | "DEPRECATED" | "BLACKLISTED" | "DELETED" | "TEMPORARY" | "IMPORTED";
     build?: Build;
+    buildCategory: "STANDARD" | "SERVICE";
     creationTime?: string; // date-time
     creationUser?: User;
     deployPath?: string;
@@ -26,6 +27,7 @@ export interface Artifact {
 }
 export interface ArtifactInfo {
     artifactQuality?: "NEW" | "VERIFIED" | "TESTED" | "DEPRECATED" | "BLACKLISTED" | "DELETED" | "TEMPORARY" | "IMPORTED";
+    buildCategory?: "STANDARD" | "SERVICE";
     id?: string;
     identifier?: string;
     repositoryType?: "MAVEN" | "NPM" | "COCOA_POD" | "GENERIC_PROXY" | "DISTRIBUTION_ARCHIVE";
@@ -46,6 +48,7 @@ export interface ArtifactPage {
 }
 export interface ArtifactRevision {
     artifactQuality?: "NEW" | "VERIFIED" | "TESTED" | "DEPRECATED" | "BLACKLISTED" | "DELETED" | "TEMPORARY" | "IMPORTED";
+    buildCategory?: "STANDARD" | "SERVICE";
     id: string;
     modificationTime?: string; // date-time
     modificationUser?: User;
@@ -100,6 +103,13 @@ export interface BuildConfigPage {
 }
 export interface BuildConfigRevisionPage {
     content?: BuildConfigurationRevision[];
+    pageIndex?: number; // int32
+    pageSize?: number; // int32
+    totalHits?: number; // int32
+    totalPages?: number; // int32
+}
+export interface BuildConfigWithLatestPage {
+    content?: BuildConfigurationWithLatestBuild[];
     pageIndex?: number; // int32
     pageSize?: number; // int32
     totalHits?: number; // int32
@@ -181,6 +191,35 @@ export interface BuildConfigurationRevisionRef {
     rev?: number; // int32
     scmRevision?: string;
 }
+export interface BuildConfigurationWithLatestBuild {
+    brewPullActive?: boolean;
+    buildScript?: string;
+    buildType: "MVN" | "NPM" | "GRADLE" | "SBT";
+    creationTime?: string; // date-time
+    creationUser?: User;
+    defaultAlignmentParams?: string;
+    dependencies?: {
+        [name: string]: BuildConfigurationRef;
+    };
+    description?: string;
+    environment?: Environment;
+    groupConfigs?: {
+        [name: string]: GroupConfigurationRef;
+    };
+    id: string;
+    latestBuild?: BuildRef;
+    latestBuildUsername?: string;
+    modificationTime?: string; // date-time
+    modificationUser?: User;
+    name: string; // ^[a-zA-Z0-9_.][a-zA-Z0-9_.-]*(?<!\.git)$
+    parameters?: {
+        [name: string]: string;
+    };
+    productVersion?: ProductVersionRef;
+    project?: ProjectRef;
+    scmRepository?: SCMRepository;
+    scmRevision?: string;
+}
 export interface BuildEnvironmentPage {
     content?: Environment[];
     pageIndex?: number; // int32
@@ -197,7 +236,7 @@ export interface BuildPage {
 }
 export interface BuildPushParameters {
     reimport?: boolean;
-    tagPrefix?: string;
+    tagPrefix: string;
 }
 export interface BuildPushResult {
     brewBuildId?: number; // int32
@@ -386,6 +425,13 @@ export interface PageBuildConfigurationRevision {
     totalHits?: number; // int32
     totalPages?: number; // int32
 }
+export interface PageBuildConfigurationWithLatestBuild {
+    content?: BuildConfigurationWithLatestBuild[];
+    pageIndex?: number; // int32
+    pageSize?: number; // int32
+    totalHits?: number; // int32
+    totalPages?: number; // int32
+}
 export interface PageEnvironment {
     content?: Environment[];
     pageIndex?: number; // int32
@@ -469,6 +515,7 @@ export interface Parameter {
 }
 export namespace Parameters {
     export type Attribute = string[];
+    export type BuildCategories = ("STANDARD" | "SERVICE")[];
     export type BuildConfigName = string;
     export type BuildDependencies = boolean;
     export type BuildType = string;
@@ -683,8 +730,14 @@ export namespace Responses {
     export type $200 = BuildPage;
     export type $201 = RepositoryCreationResponse;
     export type $202 = RepositoryCreationResponse;
+    export interface $204 {
+    }
+    export interface $302 {
+    }
     export type $400 = ErrorResponse;
     export type $403 = ErrorResponse;
+    export interface $404 {
+    }
     export type $409 = ErrorResponse;
     export type $500 = ErrorResponse;
 }
