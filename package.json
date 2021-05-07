@@ -11,6 +11,7 @@
     "typescript": "^3.9.7"
   },
   "scripts": {
-    "build": "lerna run build"
+    "build": "lerna run build",
+    "postinstall": "(cd packages/pnc-dto-types && npm install); (cd packages/pnc-messagebus-client && npm install); (cd packages/umd-bundle && npm install)"
   }
 }

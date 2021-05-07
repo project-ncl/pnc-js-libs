@@ -16,6 +16,6 @@
     "build": "rollup -c"
   },
   "dependencies": {
-    "@project-ncl/pnc-messagebus-client": "^2.0.0"
+    "@project-ncl/pnc-messagebus-client": "file:../pnc-messagebus-client"
   }
 }

@@ -45,6 +45,6 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
-    "@project-ncl/pnc-dto-types": "^2.0.0"
+    "@project-ncl/pnc-dto-types": "file:../pnc-dto-types"
   }
 }
