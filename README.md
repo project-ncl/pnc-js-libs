@@ -21,5 +21,14 @@ library at the moment mainly process pnc notifications
   - transpile TypeScript to JavaScript, output: umd-bundle/dist/pnc-js-libs.js (it's accessible via bower.json main property)
 
 ## Release
-- we're using bower as package manager in main ui project that's using this library, it's 
-  enough to create signed tag in github and new version will be picked up by bower
+Release process:
+ 1) Create & checkout version branch (2.0.0 for example)
+ 2a) npx lerna version 2.0.0 --no-git-tag-version --no-push --force-publish
+ 2b) Manually update root package.json version
+ 3) npm run build
+ 4) Commit all changes and raise a PR
+ 5) After merging the PR pull the changes locally
+ 6) Tag the release with a semver compatible version (for example v2.0.0)
+ 7) git push upstream --tags
+
+ 8) (Not doing right now) npm publish
