@@ -11,6 +11,6 @@
     "typescript": "^3.9.7"
   },
   "scripts": {
-    "build": "lerna run build"
+    "build": "lerna bootstrap --hoist && lerna run build --stream && lerna run test --stream"
   }
 }
