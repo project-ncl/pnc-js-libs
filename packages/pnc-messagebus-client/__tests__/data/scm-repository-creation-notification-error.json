@@ -1,0 +1,22 @@
+{
+  "job": "SCM_REPOSITORY_CREATION",
+  "notificationType": "BpmEventType.RC_REPO_CLONE_ERROR(type=class org.jboss.pnc.bpm.model.BpmStringMapNotificationRest)",
+  "data": {
+    "repositoryConfiguration": {
+      "internalUrl": null,
+      "externalUrl": "https://github.com/errorRepo20220215",
+      "preBuildSyncEnabled": true
+    },
+    "buildConfiguration": null,
+    "revision": null,
+    "repositoryConfigurationRest": {
+      "internalUrl": null,
+      "externalUrl": "https://github.com/errorRepo20220215",
+      "preBuildSyncEnabled": true
+    }
+  },
+  "taskId": "3",
+  "progress": "FINISHED",
+  "oldProgress": "IN_PROGRESS",
+  "message": null
+}

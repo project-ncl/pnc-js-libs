@@ -19,6 +19,7 @@ export interface Artifact {
     modificationUser?: User;
     originUrl?: string;
     publicUrl?: string;
+    purl?: string;
     qualityLevelReason?: string;
     sha1?: string;
     sha256?: string;
@@ -66,6 +67,7 @@ export interface Banner {
     banner?: string;
 }
 export interface Build {
+    alignmentPreference?: "PREFER_PERSISTENT" | "PREFER_TEMPORARY";
     attributes?: {
         [name: string]: string;
     };
@@ -76,6 +78,7 @@ export interface Build {
     environment?: Environment;
     groupBuild?: GroupBuildRef;
     id: string;
+    lastUpdateTime?: string; // date-time
     noRebuildCause?: BuildRef;
     productMilestone?: ProductMilestoneRef;
     progress?: "PENDING" | "IN_PROGRESS" | "FINISHED";
@@ -257,11 +260,52 @@ export interface BuildPushResultRef {
     message?: string;
     status: "ACCEPTED" | "SUCCESS" | "REJECTED" | "FAILED" | "SYSTEM_ERROR" | "CANCELED";
 }
+export interface BuildRecordInsights {
+    autoalign?: boolean;
+    brewpullactive?: boolean;
+    buildConfigSetRecordId?: number; // int32
+    buildConfigurationId?: number; // int32
+    buildConfigurationName?: string;
+    buildConfigurationRev?: number; // int32
+    buildContentId?: string;
+    buildId?: number; // int64
+    buildType?: string;
+    endTime?: string; // date-time
+    executionRootName?: string;
+    executionRootVersion?: string;
+    lastUpdateTime?: string; // date-time
+    productId?: number; // int32
+    productMilestoneId?: number; // int32
+    productMilestoneVersion?: string;
+    productName?: string;
+    productVersionId?: number; // int32
+    productVersionVersion?: string;
+    projectId?: number; // int32
+    projectName?: string;
+    startTime?: string; // date-time
+    status?: string;
+    submitMonth?: number; // int32
+    submitQuarter?: number; // int32
+    submitTime?: string; // date-time
+    submitYear?: number; // int32
+    temporarybuild?: boolean;
+    userId?: number; // int32
+    username?: string;
+}
+export interface BuildRecordInsightsPage {
+    content?: BuildRecordInsights[];
+    pageIndex?: number; // int32
+    pageSize?: number; // int32
+    totalHits?: number; // int32
+    totalPages?: number; // int32
+}
 export interface BuildRef {
+    alignmentPreference?: "PREFER_PERSISTENT" | "PREFER_TEMPORARY";
     buildContentId?: string;
     buildOutputChecksum?: string;
     endTime?: string; // date-time
     id: string;
+    lastUpdateTime?: string; // date-time
     progress?: "PENDING" | "IN_PROGRESS" | "FINISHED";
     scmRevision?: string;
     scmTag?: string;
@@ -280,6 +324,26 @@ export interface BuildsGraph {
 export interface CreateAndSyncSCMRequest {
     preBuildSyncEnabled?: boolean;
     scmUrl: string;
+}
+export interface DeliverableAnalyzerOperation {
+    endTime?: string; // date-time
+    id: string;
+    parameters?: {
+        [name: string]: string;
+    };
+    productMilestone?: ProductMilestoneRef;
+    progressStatus?: "NEW" | "PENDING" | "IN_PROGRESS" | "FINISHED";
+    result?: "SUCCESSFUL" | "FAILED" | "REJECTED" | "CANCELLED" | "TIMEOUT" | "SYSTEM_ERROR";
+    startTime?: string; // date-time
+    submitTime?: string; // date-time
+    user?: User;
+}
+export interface DeliverableAnalyzerOperationPage {
+    content?: DeliverableAnalyzerOperation[];
+    pageIndex?: number; // int32
+    pageSize?: number; // int32
+    totalHits?: number; // int32
+    totalPages?: number; // int32
 }
 export interface DeliverablesAnalysisRequest {
     sourcesLink: string[];
@@ -315,6 +379,7 @@ export interface GraphBuild {
     };
 }
 export interface GroupBuild {
+    alignmentPreference?: "PREFER_PERSISTENT" | "PREFER_TEMPORARY";
     endTime?: string; // date-time
     groupConfig?: GroupConfigurationRef;
     id: string;
@@ -335,6 +400,7 @@ export interface GroupBuildPushRequest {
     tagPrefix?: string;
 }
 export interface GroupBuildRef {
+    alignmentPreference?: "PREFER_PERSISTENT" | "PREFER_TEMPORARY";
     endTime?: string; // date-time
     id: string;
     startTime?: string; // date-time
@@ -432,6 +498,20 @@ export interface PageBuildConfigurationWithLatestBuild {
     totalHits?: number; // int32
     totalPages?: number; // int32
 }
+export interface PageBuildRecordInsights {
+    content?: BuildRecordInsights[];
+    pageIndex?: number; // int32
+    pageSize?: number; // int32
+    totalHits?: number; // int32
+    totalPages?: number; // int32
+}
+export interface PageDeliverableAnalyzerOperation {
+    content?: DeliverableAnalyzerOperation[];
+    pageIndex?: number; // int32
+    pageSize?: number; // int32
+    totalHits?: number; // int32
+    totalPages?: number; // int32
+}
 export interface PageEnvironment {
     content?: Environment[];
     pageIndex?: number; // int32
@@ -514,6 +594,7 @@ export interface Parameter {
     name?: string;
 }
 export namespace Parameters {
+    export type AlignmentPreference = "PREFER_PERSISTENT" | "PREFER_TEMPORARY";
     export type Attribute = string[];
     export type BuildCategories = ("STANDARD" | "SERVICE")[];
     export type BuildConfigName = string;
@@ -536,6 +617,7 @@ export namespace Parameters {
     export type Reason = string;
     export type RebuildMode = "IMPLICIT_DEPENDENCY_CHECK" | "EXPLICIT_DEPENDENCY_CHECK" | "FORCE";
     export type RepoType = "MAVEN" | "NPM" | "COCOA_POD" | "GENERIC_PROXY" | "DISTRIBUTION_ARCHIVE";
+    export type Result = "SUCCESSFUL" | "FAILED" | "REJECTED" | "CANCELLED" | "TIMEOUT" | "SYSTEM_ERROR";
     export type Rev = number; // int32
     export type Running = boolean;
     export type Search = string;
@@ -565,6 +647,7 @@ export interface Product {
     };
 }
 export interface ProductMilestone {
+    deliveredArtifactsImporter?: User;
     distributedArtifactsImporter?: User;
     endDate?: string; // date-time
     id: string;
