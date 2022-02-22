@@ -283,8 +283,8 @@ describe("MessageBus", () => {
         expect(mockListener.mock.calls[0][0]).toEqual(mockScmRepositoryCreationNotification);
     });
 
-    it("should notify onScmRepositoryCreationFailed listeners when it receives a notification with notificationType contains error", async () => {
-        messageBus.onScmRepositoryCreationFailed(mockListener);
+    it("should notify onScmRepositoryCreationError listeners when it receives a notification with notificationType contains error", async () => {
+        messageBus.onScmRepositoryCreationError(mockListener);
 
         server.send(mockScmRepositoryCreationNotificationErrorType);
         expect(mockListener.mock.calls[0][0]).toEqual(mockScmRepositoryCreationNotificationErrorType);

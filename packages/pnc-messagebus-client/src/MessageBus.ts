@@ -144,7 +144,7 @@ export default class MessageBus {
         });
     }
 
-    public onScmRepositoryCreationFailed(listener: Consumer<any>): ListenerUnsubscriber {
+    public onScmRepositoryCreationError(listener: Consumer<any>): ListenerUnsubscriber {
         return this.addDispatcher(notification => {
             if (isScmRepositoryCreationErrorNotification(notification)) {
                 listener(notification);

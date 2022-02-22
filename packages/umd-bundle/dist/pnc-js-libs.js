@@ -137,7 +137,7 @@
                 }
             });
         }
-        onScmRepositoryCreationFailed(listener) {
+        onScmRepositoryCreationError(listener) {
             return this.addDispatcher(notification => {
                 if (isScmRepositoryCreationErrorNotification(notification)) {
                     listener(notification);
