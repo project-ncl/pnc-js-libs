@@ -5,6 +5,7 @@ import GenericSettingMaintenanceNotification from "./GenericSettingMaintenanceNo
 import GroupBuildStatusChangedNotification from "./GroupBuildStatusChangedNotification";
 import MilestonePushResultNotification from "./MilestonePushResultNotification";
 import Notification from "./Notification";
+import ScmRepositoryCreationErrorNotification from "./ScmRepositoryCreationErrorNotification";
 import ScmRepositoryCreationNotification from "./ScmRepositoryCreationNotification";
 
 
@@ -27,6 +28,10 @@ export function isGenericSettingAnnouncementNotification(notification: Notificat
 
 export function isScmRepositoryCreationSuccessNotification(notification: Notification): notification is ScmRepositoryCreationNotification {
     return notification.job === "SCM_REPOSITORY_CREATION" && notification.notificationType === "SCMR_CREATION_SUCCESS";
+}
+
+export function isScmRepositoryCreationErrorNotification(notification: Notification): notification is ScmRepositoryCreationErrorNotification {
+    return notification.job === "SCM_REPOSITORY_CREATION" && notification.notificationType && notification.notificationType.includes("ERROR");
 }
 
 export function isBuildPushResultNotification(notification: Notification): notification is BuildPushResultNotification {

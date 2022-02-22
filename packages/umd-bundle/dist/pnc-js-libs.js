@@ -19,6 +19,9 @@
     function isScmRepositoryCreationSuccessNotification(notification) {
         return notification.job === "SCM_REPOSITORY_CREATION" && notification.notificationType === "SCMR_CREATION_SUCCESS";
     }
+    function isScmRepositoryCreationErrorNotification(notification) {
+        return notification.job === "SCM_REPOSITORY_CREATION" && notification.notificationType && notification.notificationType.includes("ERROR");
+    }
     function isBuildPushResultNotification(notification) {
         return notification.job === "BREW_PUSH" && notification.notificationType === "BREW_PUSH_RESULT";
     }
@@ -130,6 +133,13 @@
         onScmRepositoryCreationSuccess(listener) {
             return this.addDispatcher(notification => {
                 if (isScmRepositoryCreationSuccessNotification(notification)) {
+                    listener(notification);
+                }
+            });
+        }
+        onScmRepositoryCreationFailed(listener) {
+            return this.addDispatcher(notification => {
+                if (isScmRepositoryCreationErrorNotification(notification)) {
                     listener(notification);
                 }
             });

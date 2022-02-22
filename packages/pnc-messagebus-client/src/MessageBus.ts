@@ -8,6 +8,7 @@ import {
     isGenericSettingMaintenanceNotification,
     isGroupBuildStatusChangedNotification,
     isMilestonePushResultNotification,
+    isScmRepositoryCreationErrorNotification,
     isScmRepositoryCreationSuccessNotification
 } from "./dto/TypeGuards";
 import { Consumer, ListenerUnsubscriber } from "./GenericTypes";
@@ -138,6 +139,14 @@ export default class MessageBus {
     public onScmRepositoryCreationSuccess(listener: Consumer<any>): ListenerUnsubscriber {
         return this.addDispatcher(notification => {
             if (isScmRepositoryCreationSuccessNotification(notification)) {
+                listener(notification);
+            }
+        });
+    }
+
+    public onScmRepositoryCreationFailed(listener: Consumer<any>): ListenerUnsubscriber {
+        return this.addDispatcher(notification => {
+            if (isScmRepositoryCreationErrorNotification(notification)) {
                 listener(notification);
             }
         });

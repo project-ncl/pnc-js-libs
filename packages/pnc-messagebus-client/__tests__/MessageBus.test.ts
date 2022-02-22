@@ -29,6 +29,7 @@ describe("MessageBus", () => {
 
     let mockScmRepositoryCreationNotification: ScmRepositoryCreationNotification;
     let mockScmRepositoryCreationNotificationWrongType: ScmRepositoryCreationNotification;
+    let mockScmRepositoryCreationNotificationErrorType: ScmRepositoryCreationNotification;
 
     let mockBuildPushResultNotification: BuildPushResultNotification;
 
@@ -48,6 +49,7 @@ describe("MessageBus", () => {
         mockGenericSettingAnnouncementNotification = await import("./data/new-announcement-notification.json") as GenericSettingAnnouncementNotification;
         mockScmRepositoryCreationNotification = await import("./data/scm-repository-creation-notification.json") as ScmRepositoryCreationNotification;
         mockScmRepositoryCreationNotificationWrongType = await import("./data/scm-repository-creation-notification2.json") as ScmRepositoryCreationNotification;
+        mockScmRepositoryCreationNotificationErrorType = await import("./data/scm-repository-creation-notification-error.json") as ScmRepositoryCreationNotification;
         mockBuildPushResultNotification = await import("./data/build-push-notification-success-1.json") as BuildPushResultNotification;
         mockMilestonePushResultNotification = await import("./data/milestone-push-notification-success-1.json") as MilestonePushResultNotification;
         mockListener = jest.fn();
@@ -279,6 +281,13 @@ describe("MessageBus", () => {
         server.send(mockScmRepositoryCreationNotification);
 
         expect(mockListener.mock.calls[0][0]).toEqual(mockScmRepositoryCreationNotification);
+    });
+
+    it("should notify onScmRepositoryCreationFailed listeners when it receives a notification with notificationType contains error", async () => {
+        messageBus.onScmRepositoryCreationFailed(mockListener);
+
+        server.send(mockScmRepositoryCreationNotificationErrorType);
+        expect(mockListener.mock.calls[0][0]).toEqual(mockScmRepositoryCreationNotificationErrorType);
     });
 
     it("should NOT notify onScmRepositoryCreationSuccess listeners when it receives a notification with a non-matching notification type", async () => {
