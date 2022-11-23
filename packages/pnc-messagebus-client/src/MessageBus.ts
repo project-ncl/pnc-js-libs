@@ -36,7 +36,7 @@ export default class MessageBus {
     public async close(): Promise<CloseEvent> {
         return new Promise(resolve => {
             if (this.ws.readyState === this.ws.CLOSED) {
-                resolve();
+                resolve(undefined);
                 return;
             }
             this.ws.addEventListener("close", event => resolve(event));

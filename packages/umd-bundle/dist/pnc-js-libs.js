@@ -1,8 +1,8 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
     typeof define === 'function' && define.amd ? define(['exports'], factory) :
-    (global = global || self, factory(global.PncJsLibs = {}));
-}(this, (function (exports) { 'use strict';
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.PncJsLibs = {}));
+})(this, (function (exports) { 'use strict';
 
     function isBuildChangedNotification(notification) {
         return notification.job === "BUILD";
@@ -30,8 +30,10 @@
     }
 
     class MessageBus {
+        url;
+        ws;
+        dispatchers = [];
         constructor(url) {
-            this.dispatchers = [];
             this.url = url;
         }
         async connect() {
@@ -44,7 +46,7 @@
         async close() {
             return new Promise(resolve => {
                 if (this.ws.readyState === this.ws.CLOSED) {
-                    resolve();
+                    resolve(undefined);
                     return;
                 }
                 this.ws.addEventListener("close", event => resolve(event));
@@ -176,6 +178,4 @@
 
     exports.MessageBus = MessageBus;
 
-    Object.defineProperty(exports, '__esModule', { value: true });
-
-})));
+}));
