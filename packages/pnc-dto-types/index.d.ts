@@ -346,7 +346,7 @@ export interface DeliverableAnalyzerOperationPage {
     totalPages?: number; // int32
 }
 export interface DeliverablesAnalysisRequest {
-    sourcesLink: string[];
+    deliverablesUrls: string[];
 }
 export interface EdgeBuild {
     cost?: number; // int32
@@ -589,6 +589,13 @@ export interface PageSCMRepository {
     totalHits?: number; // int32
     totalPages?: number; // int32
 }
+export interface PageTargetRepository {
+    content?: TargetRepository[];
+    pageIndex?: number; // int32
+    pageSize?: number; // int32
+    totalHits?: number; // int32
+    totalPages?: number; // int32
+}
 export interface Parameter {
     description?: string;
     name?: string;
@@ -775,7 +782,7 @@ export interface Project {
     engineeringTeam?: string;
     id: string;
     issueTrackerUrl?: string;
-    name?: string;
+    name: string;
     projectUrl?: string;
     technicalLeader?: string;
 }
@@ -791,7 +798,7 @@ export interface ProjectRef {
     engineeringTeam?: string;
     id: string;
     issueTrackerUrl?: string;
-    name?: string;
+    name: string;
     projectUrl?: string;
     technicalLeader?: string;
 }
@@ -806,12 +813,12 @@ export interface QueryParameters {
 }
 export interface RepositoryCreationResponse {
     repository?: SCMRepository;
-    taskId?: number; // int32
+    taskId?: number; // int64
 }
-export type RequestBody = SCMRepository;
+export type RequestBody = TargetRepository;
 export namespace Responses {
     export type $200 = BuildPage;
-    export type $201 = RepositoryCreationResponse;
+    export type $201 = TargetRepository;
     export type $202 = RepositoryCreationResponse;
     export interface $204 {
     }
@@ -852,6 +859,13 @@ export interface TargetRepository {
     repositoryPath: string;
     repositoryType: "MAVEN" | "NPM" | "COCOA_POD" | "GENERIC_PROXY" | "DISTRIBUTION_ARCHIVE";
     temporaryRepo: boolean;
+}
+export interface TargetRepositoryPage {
+    content?: TargetRepository[];
+    pageIndex?: number; // int32
+    pageSize?: number; // int32
+    totalHits?: number; // int32
+    totalPages?: number; // int32
 }
 export interface User {
     id: string;
