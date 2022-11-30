@@ -16,7 +16,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "dtsgenerator": "^2.3.2",
-    "replace": "^1.2.1"
+    "replace": "^1.2.2"
   },
   "types": "index.d.ts",
   "scripts": {
