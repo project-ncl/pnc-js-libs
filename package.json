@@ -6,7 +6,7 @@
   "license": "Apache-2.0",
   "private": true,
   "devDependencies": {
-    "lerna": "^3.18.4",
+    "lerna": "^6.1.0",
     "ts-lint": "^4.5.1",
     "typescript": "^3.9.7"
   },
