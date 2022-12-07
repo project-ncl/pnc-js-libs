@@ -12,5 +12,9 @@
   },
   "scripts": {
     "build": "lerna bootstrap --hoist && lerna run build --stream && lerna run test --stream"
+  },
+  "engines": {
+    "node": "^18.12.0",
+    "npm": "^9.1.0"
   }
 }

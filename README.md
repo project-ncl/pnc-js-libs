@@ -8,7 +8,8 @@ library at the moment mainly process pnc notifications
 
 ## Prerequisites
 
-- locall instalation of **Node**, **npm** and **mvn**
+1. See `"engines"` in [package.json](./package.json) for minimum version requirements (for example `node` and `npm`)
+2. `mvn`
 
 ## Build project
 - git clone <repository> pnc-js-libs
