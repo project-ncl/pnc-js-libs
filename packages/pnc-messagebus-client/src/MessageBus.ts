@@ -4,10 +4,9 @@ import Notification from "./dto/Notification";
 import {
     isBuildChangedNotification,
     isBuildPushResultNotification,
-    isGenericSettingAnnouncementNotification,
-    isGenericSettingMaintenanceNotification,
     isGroupBuildStatusChangedNotification,
     isMilestonePushResultNotification,
+    isPNCStatusChangedNotification,
     isScmRepositoryCreationErrorNotification,
     isScmRepositoryCreationSuccessNotification
 } from "./dto/TypeGuards";
@@ -120,20 +119,12 @@ export default class MessageBus {
         });
     }
 
-    public onGenericSettingMaintenanceChanged(listener: Consumer<any>): ListenerUnsubscriber {
+    public onPNCStatusChanged(listener: Consumer<any>): ListenerUnsubscriber {
         return this.addDispatcher(notification => {
-            if (isGenericSettingMaintenanceNotification(notification)) {
+            if(isPNCStatusChangedNotification(notification)){
                 listener(notification);
             }
-        });
-    }
-
-    public onGenericSettingNewAnnouncement(listener: Consumer<any>): ListenerUnsubscriber {
-        return this.addDispatcher(notification => {
-            if (isGenericSettingAnnouncementNotification(notification)) {
-                listener(notification);
-            }
-        });
+        })
     }
 
     public onScmRepositoryCreationSuccess(listener: Consumer<any>): ListenerUnsubscriber {

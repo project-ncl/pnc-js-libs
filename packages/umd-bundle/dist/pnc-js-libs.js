@@ -10,11 +10,8 @@
     function isGroupBuildStatusChangedNotification(notification) {
         return notification.job === "GROUP_BUILD";
     }
-    function isGenericSettingMaintenanceNotification(notification) {
-        return notification.job === "GENERIC_SETTING" && notification.notificationType === "MAINTENANCE_STATUS_CHANGED";
-    }
-    function isGenericSettingAnnouncementNotification(notification) {
-        return notification.job === "GENERIC_SETTING" && notification.notificationType === "NEW_ANNOUNCEMENT";
+    function isPNCStatusChangedNotification(notification) {
+        return notification.job === "GENERIC_SETTING" && notification.notificationType === "PNC_STATUS_CHANGED";
     }
     function isScmRepositoryCreationSuccessNotification(notification) {
         return notification.job === "SCM_REPOSITORY_CREATION" && notification.notificationType === "SCMR_CREATION_SUCCESS";
@@ -116,16 +113,9 @@
                 }
             });
         }
-        onGenericSettingMaintenanceChanged(listener) {
+        onPNCStatusChanged(listener) {
             return this.addDispatcher(notification => {
-                if (isGenericSettingMaintenanceNotification(notification)) {
-                    listener(notification);
-                }
-            });
-        }
-        onGenericSettingNewAnnouncement(listener) {
-            return this.addDispatcher(notification => {
-                if (isGenericSettingAnnouncementNotification(notification)) {
+                if (isPNCStatusChangedNotification(notification)) {
                     listener(notification);
                 }
             });
