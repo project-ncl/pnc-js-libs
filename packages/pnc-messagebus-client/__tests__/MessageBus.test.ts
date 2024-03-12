@@ -1,8 +1,6 @@
 import { WS } from "jest-websocket-mock";
 import BuildChangedNotification from "../src/dto/BuildChangedNotification";
 import BuildPushResultNotification from "../src/dto/BuildPushResultNotification";
-import GenericSettingAnnouncementNotification from "../src/dto/GenericSettingAnnouncementNotification";
-import GenericSettingMaintenanceNotification from "../src/dto/GenericSettingMaintenanceNotification";
 import GroupBuildStatusChangedNotification from "../src/dto/GroupBuildStatusChangedNotification";
 import MilestonePushResultNotification from "../src/dto/MilestonePushResultNotification";
 import ScmRepositoryCreationNotification from "../src/dto/ScmRepositoryCreationNotification";
@@ -23,9 +21,6 @@ describe("MessageBus", () => {
     let mockGroupBuildInProgressNotification2: GroupBuildStatusChangedNotification;
     let mockGroupBuildPendingNotification: GroupBuildStatusChangedNotification;
 
-    let mockGenericSettingMaintenanceOnNotification: GenericSettingMaintenanceNotification;
-    let mockGenericSettingMaintenanceOffNotification: GenericSettingMaintenanceNotification;
-    let mockGenericSettingAnnouncementNotification: GenericSettingAnnouncementNotification;
 
     let mockScmRepositoryCreationNotification: ScmRepositoryCreationNotification;
     let mockScmRepositoryCreationNotificationWrongType: ScmRepositoryCreationNotification;
@@ -44,9 +39,6 @@ describe("MessageBus", () => {
         mockGroupBuildInProgressNotification = await import("./data/group-build-in-progress-notification.json") as GroupBuildStatusChangedNotification;
         mockGroupBuildInProgressNotification2 = await import("./data/group-build-in-progress-notification2.json") as GroupBuildStatusChangedNotification;
         mockGroupBuildPendingNotification = await import("./data/group-build-pending-notification.json") as GroupBuildStatusChangedNotification;
-        mockGenericSettingMaintenanceOffNotification = await import("./data/maintenance-mode-off-notification.json") as GenericSettingMaintenanceNotification;
-        mockGenericSettingMaintenanceOnNotification = await import("./data/maintenance-mode-on-notification.json") as GenericSettingMaintenanceNotification;
-        mockGenericSettingAnnouncementNotification = await import("./data/new-announcement-notification.json") as GenericSettingAnnouncementNotification;
         mockScmRepositoryCreationNotification = await import("./data/scm-repository-creation-notification.json") as ScmRepositoryCreationNotification;
         mockScmRepositoryCreationNotificationWrongType = await import("./data/scm-repository-creation-notification2.json") as ScmRepositoryCreationNotification;
         mockScmRepositoryCreationNotificationErrorType = await import("./data/scm-repository-creation-notification-error.json") as ScmRepositoryCreationNotification;
@@ -235,46 +227,6 @@ describe("MessageBus", () => {
         expect(mockListener.mock.calls.length).toEqual(0);
     });
 
-    it("should notify onGenericSettingMaintenanceChanged listeners when it receives a notification with a matching status(maintenance on)", async () => {
-        messageBus.onGenericSettingMaintenanceChanged(mockListener);
-
-        server.send(mockGenericSettingMaintenanceOnNotification);
-
-        expect(mockListener.mock.calls[0][0]).toEqual(mockGenericSettingMaintenanceOnNotification);
-    });
-
-    it("should notify onGenericSettingMaintenanceChanged listeners when it receives a notification with a matching status(maintenance off)", async () => {
-        messageBus.onGenericSettingMaintenanceChanged(mockListener);
-
-        server.send(mockGenericSettingMaintenanceOffNotification);
-
-        expect(mockListener.mock.calls[0][0]).toEqual(mockGenericSettingMaintenanceOffNotification);
-    });
-
-    it("should notify onGenericSettingNewAnnouncement listeners when it receives a notification with a matching status", async () => {
-        messageBus.onGenericSettingNewAnnouncement(mockListener);
-
-        server.send(mockGenericSettingAnnouncementNotification);
-
-        expect(mockListener.mock.calls[0][0]).toEqual(mockGenericSettingAnnouncementNotification);
-        expect(mockListener.mock.calls[0][0].message).toEqual("{\"banner: \"Dennis - WS test2\"}");
-    });
-
-    it("should NOT notify onGenericSettingMaintenanceChanged listeners when it receives a notification with a non-matching status", async () => {
-        messageBus.onGenericSettingMaintenanceChanged(mockListener);
-
-        server.send(mockGenericSettingAnnouncementNotification);
-
-        expect(mockListener.mock.calls.length).toEqual(0);
-    });
-
-    it("should NOT notify onGenericSettingNewAnnouncement listeners when it receives a notification with a non-matching status", async () => {
-        messageBus.onGenericSettingNewAnnouncement(mockListener);
-
-        server.send(mockGenericSettingMaintenanceOnNotification);
-        expect(mockListener.mock.calls.length).toEqual(0);
-    });
-
     it("should notify onScmRepositoryCreationSuccess listeners when it receives a notification with a matching notification type(SCMR_CREATION_SUCCESS)", async () => {
         messageBus.onScmRepositoryCreationSuccess(mockListener);
 
@@ -300,7 +252,7 @@ describe("MessageBus", () => {
     it("should NOT notify onScmRepositoryCreationSuccess listeners when it receives other notifications", async () => {
         messageBus.onScmRepositoryCreationSuccess(mockListener);
 
-        server.send(mockGenericSettingAnnouncementNotification);
+        server.send(mockBuildInProgressNotification);
         expect(mockListener.mock.calls.length).toEqual(0);
     });
 
