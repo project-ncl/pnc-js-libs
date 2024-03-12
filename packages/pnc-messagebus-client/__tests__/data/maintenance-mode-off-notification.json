@@ -1,7 +1,0 @@
-{
-  "job": "GENERIC_SETTING",
-  "notificationType": "MAINTENANCE_STATUS_CHANGED",
-  "progress": "FINISHED",
-  "oldProgress": "PENDING",
-  "message": "{\"status : \"ON\"}"
-}

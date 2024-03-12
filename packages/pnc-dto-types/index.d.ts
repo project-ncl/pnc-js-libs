@@ -760,6 +760,11 @@ export namespace Parameters {
 export interface PathParameters {
     id: Parameters.Id;
 }
+export interface PncStatus {
+    banner?: string;
+    eta?: string; // date-time
+    isMaintenanceMode: boolean;
+}
 export interface Product {
     abbreviation: string; // [a-zA-Z0-9-]+
     description?: string;
