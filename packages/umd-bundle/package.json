@@ -1,6 +1,6 @@
 {
   "name": "@project-ncl/pnc-js-libs-bundle",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "UMD bundle of pnc js libs",
   "author": "Alex Creasy <acreasy@redhat.com>",
   "license": "Apache-2.0",
@@ -17,7 +17,7 @@
     "build": "rollup -c"
   },
   "dependencies": {
-    "@project-ncl/pnc-messagebus-client": "^2.2.1"
+    "@project-ncl/pnc-messagebus-client": "^2.2.2"
   },
   "engines": {
     "node": "^20.10.0",
