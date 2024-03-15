@@ -15,8 +15,8 @@ import { BuildListener, BuildPushListener, GroupBuildListener, MilestonePushList
 
 type Dispatcher = (notification: Notification) => void;
 export default class MessageBus {
-    private readonly url: string;
-    private ws: WebSocket;
+    private readonly url: string
+    private ws: WebSocket
 
     private dispatchers: Dispatcher[] = [];
 
@@ -36,6 +36,7 @@ export default class MessageBus {
         return new Promise(resolve => {
             if (this.ws.readyState === this.ws.CLOSED) {
                 resolve();
+
                 return;
             }
             this.ws.addEventListener("close", event => resolve(event));
